@@ -22,3 +22,5 @@ no juegan un papel importante.
 | OverallQual|
 | LotArea |
 | GarageCars |
+
+* Quitar observaciones de SalePrice que rebasen media + 2*desv 
