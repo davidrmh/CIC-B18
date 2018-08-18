@@ -104,3 +104,35 @@ creaCSVKaggle <- function(predicciones,objetivo){
   write.csv(datos, file = "David-Montalvan-House-Prices-Kaggle.csv", row.names = FALSE)
 }
 
+##========================================##
+## Función main
+##========================================##
+main <- function(){
+  #Carga conjunto de entrenamiento
+  datos <- cargaDatos("train.csv")
+  
+  #Quita valores extremos del conjunto de entrenamiento
+  #Este conjunto será el utilizado para entrenar
+  entrena <- quitaExtremos(datos)
+  
+  #Carga conjunto de prueba
+  prueba <- cargaDatos("test.csv")
+  
+  #Carga valores objetivos
+  objetivo <- cargaDatos("sample_submission.csv")
+  
+  #Ajusta el modelo
+  modelo <- lm(SalePrice ~ LotArea, data = entrena)
+  
+  #Obtiene las predicciones sobre el conjunto de prueba
+  predicciones<-predict(modelo,newdata=prueba)
+  
+  #Calcula el RMSE
+  error <- rmse(predicciones, objetivo$SalePrice)
+  
+  #Crea el CSV con los resultados
+  creaCSVKaggle(predicciones,objetivo)
+  
+  print(paste("El RMSE es ",round(error,6),sep=""))
+  
+}
