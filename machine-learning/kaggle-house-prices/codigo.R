@@ -118,21 +118,22 @@ main <- function(){
   #Carga conjunto de prueba
   prueba <- cargaDatos("test.csv")
   
-  #Carga valores objetivos
-  objetivo <- cargaDatos("sample_submission.csv")
+  #Carga el archivo ejemplo
+  ejemplo <- cargaDatos("sample_submission.csv")
   
   #Ajusta el modelo
-  modelo <- lm(SalePrice ~ LotArea, data = entrena)
+  modelo <- lm(SalePrice ~ I(YearBuilt^3) + OverallQual:LotArea + LotArea + GarageCars:LotArea,data=entrena)
   
-  #Obtiene las predicciones sobre el conjunto de prueba
-  predicciones<-predict(modelo,newdata=prueba)
+  #Obtiene las predicciones sobre el conjunto de prueba y de entrenamiento
+  prediccionesEntrena<-predict(modelo,newdata=entrena)
+  prediccionesPrueba<-predict(modelo,newdata=prueba)
   
-  #Calcula el RMSE
-  error <- rmse(predicciones, objetivo$SalePrice)
+  #Calcula el RMSE sobre el conjunto de entrenamiento
+  error <- rmse(prediccionesEntrena, entrena$SalePrice)
   
   #Crea el CSV con los resultados
-  creaCSVKaggle(predicciones,objetivo)
+  creaCSVKaggle(prediccionesPrueba,ejemplo)
   
-  print(paste("El RMSE es ",round(error,6),sep=""))
+  print(paste("El RMSE en la muestra es ",round(error,6),sep=""))
   
 }
