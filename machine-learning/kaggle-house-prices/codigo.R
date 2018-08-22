@@ -86,7 +86,7 @@ quitaExtremos <- function(datos,colName="SalePrice"){
   indicesRemover <- which(datos[,colName] > limiteSup | datos[,colName] < limiteInf )
   datos = datos[-indicesRemover,]
   nNew <- dim(datos)[1] #Num de observaciones entre los límites
-  print(paste("Se quitaron ",round(100*(nOrig - nNew)/nOrig,2), "% de observaciones",sep=""))
+  #print(paste("Se quitaron ",round(100*(nOrig - nNew)/nOrig,2), "% de observaciones",sep=""))
   return(datos)
 }
 
