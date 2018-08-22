@@ -4,6 +4,7 @@
 
 
 library(ggplot2)
+set.seed(12345)
 
 ##========================================##
 ## Función para calcular el RMSE del
@@ -103,6 +104,37 @@ creaCSVKaggle <- function(predicciones,objetivo){
   numPred <- length(predicciones)
   datos <- data.frame(Id = objetivo$Id, SalePrice = predicciones)
   write.csv(datos, file = "David-Montalvan-House-Prices-Kaggle.csv", row.names = FALSE)
+}
+
+##========================================##
+## Función para crear un conjunto de 
+## prueba ficticio
+##
+## Argumentos:
+## datos: Dataframe con los datos del archivo "train.csv"
+## prop: Proporción del conjunto de entrenamiento (número en (0,1))
+##
+## Salida:
+## Una lista con [["entrenamiento"]] el conjunto de entrenamiento
+## [["prueba"]] el conjunto de prueba
+##========================================##
+creaConjuntoPrueba <-function(datos,prop=0.8){
+  #Obtiene el número de renglones
+  renglonesTotal <- dim(datos)[1]
+  
+  #Obtiene los renglones del conjunto de entrenamiento
+  numRenEntrena <- round(renglonesTotal*prop)
+  renglonesEntrena <- sample(seq(1,renglonesTotal,by=1),
+                             size = numRenEntrena, replace = FALSE)
+  
+  #Crea el conjunto de entrenamiento
+  entrena <- datos[renglonesEntrena,]
+  
+  #crea el conjunto de prueba
+  prueba <- datos[-renglonesEntrena,]
+  
+  lista <- list(entrenamiento = entrena,prueba = prueba)
+  return(lista)
 }
 
 ##========================================##
