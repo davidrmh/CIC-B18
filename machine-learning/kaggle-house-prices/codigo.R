@@ -75,14 +75,15 @@ graficoDispersion <- function(x,y,z,datos){
 ##
 ## Atributos:
 ## datos: data.frame con los datos
+## colName: String con el nombre de la columna de interés
 ##========================================##
-quitaExtremos <- function(datos){
+quitaExtremos <- function(datos,colName="SalePrice"){
   nOrig <- dim(datos)[1] # Num Observaciones originales
-  media <- mean(datos$SalePrice)
-  desv <- sd(datos$SalePrice)
+  media <- mean(datos[,colName])
+  desv <- sd(datos[,colName])
   limiteSup <- media + 2*desv
   limiteInf <- media - 2*desv
-  indicesRemover <- which(datos$SalePrice > limiteSup | datos$SalePrice < limiteInf )
+  indicesRemover <- which(datos[,colName] > limiteSup | datos[,colName] < limiteInf )
   datos = datos[-indicesRemover,]
   nNew <- dim(datos)[1] #Num de observaciones entre los límites
   print(paste("Se quitaron ",round(100*(nOrig - nNew)/nOrig,2), "% de observaciones",sep=""))
@@ -113,7 +114,7 @@ main <- function(){
   
   #Quita valores extremos del conjunto de entrenamiento
   #Este conjunto será el utilizado para entrenar
-  entrena <- quitaExtremos(datos)
+  entrena <- quitaExtremos(datos,"GrLivArea")
   
   #Carga conjunto de prueba
   prueba <- cargaDatos("test.csv")
@@ -122,7 +123,7 @@ main <- function(){
   ejemplo <- cargaDatos("sample_submission.csv")
   
   #Ajusta el modelo
-  modelo <- lm(SalePrice ~ I(YearBuilt^3) + OverallQual:LotArea + LotArea + GarageCars:LotArea,data=entrena)
+  modelo <- lm(SalePrice ~  GrLivArea * YearBuilt * YearRemodAdd,data=entrena)
   
   #Obtiene las predicciones sobre el conjunto de prueba y de entrenamiento
   prediccionesEntrena<-predict(modelo,newdata=entrena)
