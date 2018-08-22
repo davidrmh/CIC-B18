@@ -4,7 +4,6 @@
 
 
 library(ggplot2)
-set.seed(12345)
 
 ##========================================##
 ## Función para calcular el RMSE del
@@ -170,34 +169,59 @@ cambiaNA <-function(datos,columna,valor){
 
 ##========================================##
 ## Función main
+##
+## Argumentos
+## prop: Proporción del conjunto de entrenamiento (número en (0,1))
 ##========================================##
-main <- function(){
+main <- function(prop=0.8){
+  #No olvidar fijar una semilla
+  set.seed(12345)
+  
   #Carga conjunto de entrenamiento
   datos <- cargaDatos("train.csv")
   
-  #Quita valores extremos del conjunto de entrenamiento
-  #Este conjunto será el utilizado para entrenar
-  entrena <- quitaExtremos(datos,"GrLivArea")
+  #Carga conjunto de prueba (el real)
+  pruebaReal <- cargaDatos("test.csv")
   
-  #Carga conjunto de prueba
-  prueba <- cargaDatos("test.csv")
+  #Cambia los NA necesarios
+  datos <- cambiaNA(datos,"GarageFinish","N")
+  pruebaReal <- cambiaNA(pruebaReal,"GarageFinish","N")
+  
+  #Obtiene conjuntos de entrenamiento y prueba ficticios
+  lista <- creaConjuntoPrueba(datos,prop)
+  entrenaFicticio <-lista[["entrenamiento"]]
+  pruebaFicticio <-lista[["prueba"]]
+  
+  #Quita valores extremos del conjunto de entrenamiento
+  entrenaReal <- quitaExtremos(datos,"GrLivArea")
+  entrenaFicticio <- quitaExtremos(entrenaFicticio,"GrLivArea") 
   
   #Carga el archivo ejemplo
   ejemplo <- cargaDatos("sample_submission.csv")
   
   #Ajusta el modelo
-  modelo <- lm(SalePrice ~  GrLivArea * YearBuilt * YearRemodAdd,data=entrena)
+  modeloFicticio <- lm(SalePrice ~  GrLivArea * YearBuilt * YearRemodAdd*GarageFinish,
+                       data=entrenaFicticio)
+  modeloReal <- lm(SalePrice ~  GrLivArea * YearBuilt * YearRemodAdd*GarageFinish,
+                   data=entrenaReal)
   
   #Obtiene las predicciones sobre el conjunto de prueba y de entrenamiento
-  prediccionesEntrena<-predict(modelo,newdata=entrena)
-  prediccionesPrueba<-predict(modelo,newdata=prueba)
+  prediccionesEntrenaReal<-predict(modeloReal,newdata=entrenaReal)
+  prediccionesPruebaReal<-predict(modeloReal,newdata=pruebaReal)
+  prediccionesEntrenaFicticio <- predict(modeloFicticio, newdata = entrenaFicticio)
+  prediccionesPruebaFicticio <- predict(modeloFicticio, newdata = pruebaFicticio)
   
   #Calcula el RMSE sobre el conjunto de entrenamiento
-  error <- rmse(prediccionesEntrena, entrena$SalePrice)
+  errorEntrenaReal <- rmse(prediccionesEntrenaReal, entrenaReal$SalePrice)
+  errorEntrenaFicticio <- rmse(prediccionesEntrenaFicticio,entrenaFicticio$SalePrice)
+  errorPruebaFicticio <- rmse(prediccionesPruebaFicticio,pruebaFicticio$SalePrice)
+  
   
   #Crea el CSV con los resultados
-  creaCSVKaggle(prediccionesPrueba,ejemplo)
+  creaCSVKaggle(prediccionesPruebaReal,ejemplo)
   
-  print(paste("El RMSE en la muestra es ",round(error,6),sep=""))
+  print(paste("El RMSE de EntrenaReal es ", round(errorEntrenaReal,4),sep=""))
+  print(paste("El RMSE de EntrenaFicticio es ", round(errorEntrenaFicticio,4),sep=""))
+  print(paste("El RMSE de PruebaFicticio es ", round(errorPruebaFicticio,4),sep=""))
   
 }
