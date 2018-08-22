@@ -138,6 +138,37 @@ creaConjuntoPrueba <-function(datos,prop=0.8){
 }
 
 ##========================================##
+## Función para cambiar los NA
+##
+## Argumentos
+## datos: Dataframe con los datos de interés
+## columna: String con el nombre de la columna de interés
+## valor: Valor por el cual se cambiarán los NA
+##
+## Salida
+## Dataframe datos con los NA de la columna modificados
+##========================================##
+cambiaNA <-function(datos,columna,valor){
+  #Busca las observaciones a modificar
+  indices <-which(is.na(datos[columna]))
+  
+  #El tipo de dato original
+  tipoOriginal <- class(datos[,columna])
+  
+  #convierte a character toda la columna
+  datos[,columna] = as.character(datos[,columna])
+  
+  #Cambia los renglones con NA
+  datos[indices,columna] = as.character(valor)
+  
+  #Regresa al tipo de dato original (TRUCO)
+  datos[,columna] = as.factor(datos[,columna])
+  datos[,columna] = as(datos[,columna],tipoOriginal)
+  
+  return(datos)
+}
+
+##========================================##
 ## Función main
 ##========================================##
 main <- function(){
