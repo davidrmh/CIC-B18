@@ -1,6 +1,6 @@
 House Pricing Competition 
 ========================================================
-
+autosize: true
 <style>
 .reveal h1 { 
   font-size: 60px;
@@ -122,6 +122,26 @@ Terminado interior del garage, precio de venta y año de construcción
 graficoDispersion(x = "GarageFinish", y = "SalePrice", z = "YearBuilt", datos = entrenaReal)
 ``` 
 
+Limpieza de datos
+========================================================
+
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
+
++ En el conjunto de entrenamiento, para la variable **GrLivArea**, se eliminaron las observaciones que excedían 
+ $\mu \pm 2 \sigma$. ($4\%$ de observaciones removidas)
+
++ Para la variable **GarageFinish** (Interior finish of the garage), los valores de *NA* se trataron como
+otro nivel para la variable categórica, esto para evitar predicciones *NA* en el conjunto de prueba.
+
++ Para tener una idea de la generalización del modelo sin tener que cargar archivos a kaggle, el conjunto de 
+entrenamiento original se dividió en dos conjuntos, un nuevo conjunto de entrenamiento y otro conjunto de prueba, este último conjunto se utilizó para tener una idea de que tan bien generaliza cada modelo probado. La proporción fue de $80/20$.
+
 Selección de variables y modelo final
 ========================================================
 <style>
@@ -142,25 +162,11 @@ se podía descartar la hipótesis nula $w = 0$.
 
 + El modelo final incluye las variables **GrLivArea, YearBuilt, YearRemodAdd, GarageFinish**.
 
-+ Con este modelo se obtuvo un **RMSE** en kaggle de $0.20564$, posición 3841 X‑D.
++ Con este modelo se obtuvo un **RMSE** en kaggle de $0.20564$, posición 3841.
 
-
-Limpieza de datos
+Conclusiones
 ========================================================
+<center>
+![](presentacion-figure/ralph.jpg)
+</center>
 
-<style>
-.reveal h3 { 
-  font-size: 40px;
-  font-weight:bold;
-  text-align: center
-}
-</style>
-
-+ En el conjunto de entrenamiento, para la variable **GrLivArea**, se eliminaron las observaciones que excedían 
- $\mu \pm 2 \sigma$. ($4\%$ de observaciones removidas)
-
-+ Para la variable **GarageFinish** (Interior finish of the garage), los valores de *NA* se trataron como
-otro nivel para la variable categórica, esto para evitar predicciones *NA* en el conjunto de prueba.
-
-+ Para tener una idea de la generalización del modelo sin tener que cargar archivos a kaggle, el conjunto de 
-entrenamiento original se dividió en dos conjuntos, un nuevo conjunto de entrenamiento y otro conjunto de prueba, este último conjunto se utilizó para tener una idea de que tan bien generaliza cada modelo probado. La proporción fue de $80/20$.
