@@ -1,19 +1,33 @@
-House Pricing Competition
-========================================================
-author: David Montalvan, Ismael Prado, Miguel Hernandez
-autosize: true
-
-Limpieza de datos
+House Pricing Competition 
 ========================================================
 
-+ Explicar lo de las desviaciones estandar
+<style>
+.reveal h1 { 
+  font-size: 60px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
 
-+ Explicar lo de los NA
+David Montalván 
 
-$x + 1$
+Ismael Prado
 
-Slide With Code
+Miguel Hernández
+
+Análisis de gráficas
 ========================================================
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  vertical-align: middle;
+  text-align: center
+}
+</style>
+
+
+
 ```{r,echo=FALSE}
 
 source("codigo.R")
@@ -29,8 +43,8 @@ source("codigo.R")
   pruebaReal <- cargaDatos("test.csv")
   
   #Cambia los NA necesarios
-  datos <- cambiaNA(datos,"GarageFinish","N")
-  pruebaReal <- cambiaNA(pruebaReal,"GarageFinish","N")
+  datos <- cambiaNA(datos,"GarageFinish","X")
+  pruebaReal <- cambiaNA(pruebaReal,"GarageFinish","X")
   
   #Obtiene conjuntos de entrenamiento y prueba ficticios
   lista <- creaConjuntoPrueba(datos,prop)
@@ -64,33 +78,89 @@ source("codigo.R")
 ```
 
 
-Grafica del Area de Construccion (pies cuadrados) 
+Área construida (pies cuadrados), precio de venta y año de construcción
 ========================================================
 
-```{r, echo=FALSE, fig.align='center'}
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
+
+```{r, echo=FALSE, fig.align='center', fig.width = 13, fig.height = 8}
 graficoDispersion(x = "GrLivArea", y = "SalePrice", z = "YearBuilt", datos = entrenaReal)
 ```
 
-Grafica de Anioo de Remodelacion 
+Año de remodelacion, precio de venta y año de construcción
 ========================================================
-``` {r, echo=FALSE, fig.align='center'}
+
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
+
+``` {r, echo=FALSE, fig.align='center', fig.width = 13, fig.height = 8}
 graficoDispersion(x = "YearRemodAdd", y = "SalePrice", z = "YearBuilt", datos = entrenaReal)
 ``` 
 
-Grafica del Estado del Garage 
-===
-``` {r, echo=FALSE, fig.align='center'}
+Terminado interior del garage, precio de venta y año de construcción
+========================================================
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
+
+``` {r, echo=FALSE, fig.align='center', fig.width = 13, fig.height = 8}
 graficoDispersion(x = "GarageFinish", y = "SalePrice", z = "YearBuilt", datos = entrenaReal)
 ``` 
 
-Modelo
-===
-+ Explicar como se seleccionarion las variables (pruebas t)
+Selección de variables y modelo final
+========================================================
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
 
-+ Explicar el modelo final
++ Se probaron distintos modelos lineales de la forma 
 
-+ Resultados
+$$h(\mathbf{X}) = \sum_{i} w_{i}x_{i} + \sum_{j \neq i} w_{j}x_{i}x_{j} + \sum_{k \neq i,j} w_{k}x_{i}x_{j}x_{k} + \ldots $$
 
-Conclusiones
-===
++ Para seleccionar las variables finales, en cada modelo experimentado y para cada coeficiente $w$, se realizó
+una prueba estadística del tipo *t de student* y se fueron descartando aquellas variables para las cuales no
+se podía descartar la hipótesis nula $w = 0$.
 
++ El modelo final incluye las variables **GrLivArea, YearBuilt, YearRemodAdd, GarageFinish**.
+
++ Con este modelo se obtuvo un **RMSE** en kaggle de $0.20564$, posición 3841 X‑D.
+
+
+Limpieza de datos
+========================================================
+
+<style>
+.reveal h3 { 
+  font-size: 40px;
+  font-weight:bold;
+  text-align: center
+}
+</style>
+
++ En el conjunto de entrenamiento, para la variable **GrLivArea**, se eliminaron las observaciones que excedían 
+ $\mu \pm 2 \sigma$. ($4\%$ de observaciones removidas)
+
++ Para la variable **GarageFinish** (Interior finish of the garage), los valores de *NA* se trataron como
+otro nivel para la variable categórica, esto para evitar predicciones *NA* en el conjunto de prueba.
+
++ Para tener una idea de la generalización del modelo sin tener que cargar archivos a kaggle, el conjunto de 
+entrenamiento original se dividió en dos conjuntos, un nuevo conjunto de entrenamiento y otro conjunto de prueba, este último conjunto se utilizó para tener una idea de que tan bien generaliza cada modelo probado. La proporción fue de $80/20$.
