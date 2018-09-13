@@ -148,7 +148,7 @@ int main(int argc, char *argv[]){
   r = gsl_rng_alloc(T);
 
   //number of simulations
-  const long num_sim = 1000000;
+  const long num_sim = 10000000;
 
   //number of time-steps
   const long num_steps = 252;
@@ -176,7 +176,7 @@ int main(int argc, char *argv[]){
   vector < vector<double> > simulations(num_sim, vector<double>(num_steps, s0) );
 
   double t_aux;
-  #pragma omp parallel for private(i, h, z) num_threads(100)
+  #pragma omp parallel for private(h, z, t_aux) num_threads(100)
   for(i = 0; i < num_sim; i++){
     for(h = 0; h < num_steps; h++){
       z = gsl_ran_gaussian(r, 1.0);
