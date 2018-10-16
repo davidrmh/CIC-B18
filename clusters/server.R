@@ -18,7 +18,7 @@ shinyServer(function(input, output) {
   #Para graficar los puntos
   output$plot <- renderPlot({
       plot(0,0, cex = 0, main = "Dibuja los puntos")
-      points(ubi$x_cord, ubi$y_cord, pch = 1, cex = 1.5)
+      points(ubi$x_cord, ubi$y_cord, pch = 21, cex = 0.5, bg = 1)
     
   })
   
