@@ -1,4 +1,5 @@
 library(ggplot2)
+library(parallel)
 set.seed(12345)
 
 ###==============================================================================
@@ -53,14 +54,14 @@ polinomio <- function(x,a, grado = 10){
   return(suma / sqrt(suma_norm))
 }
 
-n_sim <- 10
+n_sim <- 15
 
 grado_simple <- 2
 grado_complejo <- 10
 grado_target <- 15
 
-ptos_muestra <- seq(60, 100, by = 10)
-sigma <- seq(0.5, 3, le = length(ptos_muestra))
+ptos_muestra <- seq(60, 120, by = 10)
+sigma <- seq(0.5, 4, le = length(ptos_muestra))
 datos <- expand.grid(sigma = sigma, ptos_muestra = ptos_muestra)
 n_rows <- dim(datos)[1]
 
@@ -77,23 +78,15 @@ for(j in 1:n_rows){
     ruido <- rnorm(n, 0, sig)
     a <- rnorm(grado_target + 1)
     
-    target_determinista_in <- c()
-    for(x in x_in){
-      f_in <- evalua_target(x, grado_target, a)
-      target_determinista_in <- c(target_determinista_in, f_in)
-    }
-    
+    target_determinista_in <- mclapply(x_in, evalua_target, qf = grado_target, a = a)
+    target_determinista_in <- simplify2array(target_determinista_in)
     y_in_true <- target_determinista_in + ruido
     modelo_simple <- lm(y_in_true ~ x_in + I(x_in^2))
     modelo_complejo <- lm(y_in_true ~ x_in + I(x_in^2) + I(x_in^3) + I(x_in^4) + I(x_in^5) + I(x_in^6) +I(x_in^7) + I(x_in^8) + I(x_in^9) + I(x_in^10))
     
     x_out <- runif(n, -1, 1)
-    target_determinista_out <- c()
-    for(x in x_out){
-      f_out <- evalua_target(x, grado_target, a)
-      target_determinista_out <- c(target_determinista_out, f_out)
-    }
-    
+    target_determinista_out <- mclapply(x_out, evalua_target, qf = grado_target, a = a)
+    target_determinista_out <- simplify2array(target_determinista_out)
     y_out_true <- target_determinista_out
     y_pred_simple <- predict(modelo_simple, newdata = as.data.frame(x_out))
     y_pred_complejo <- predict(modelo_complejo, newdata = as.data.frame(x_out))
