@@ -12,11 +12,19 @@ evalua_legendre <- function(x, k){
   # SALIDA
   # polinomio de Legendre de grado k evaluado en x
   
-  if( k == 0){return(1)}
-  else if(k == 1){return(x)}
-  else{
-    return( ((2*k -1 )/ k)*x*evalua_legendre(x, k - 1) - ((k - 1) / k) * evalua_legendre(x, k - 2) )
+  if(k %% 2 == 0){
+    M<-k /2
   }
+  else if ((k - 1) %% 2 == 0 ){
+    M <- (k - 1) / 2
+  }
+  
+  suma <-0
+  for(m in 0:M){
+    suma <- suma + ((-1)^m) * (factorial(2*k - 2*m)) * x^(k - 2*m) / ((2^k) * factorial(m) * factorial(k - m) * factorial(k - 2*m))
+  }
+  
+  return(suma)
   
 }
 
@@ -35,7 +43,7 @@ evalua_target <- function(x, qf, a){
   suma <- 0
   normalizador <- 0
   for(i in 0:qf){
-    normalizador <- normalizador + (evalua_legendre(x, i))^2
+    normalizador <- normalizador + 1 / (2*i + 1)
     suma <- suma + a[i + 1]*evalua_legendre(x, i)
   }
   
