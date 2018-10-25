@@ -62,11 +62,11 @@ polinomio <- function(x,a, grado = 10){
   return(suma / sqrt(suma_norm))
 }
 
-n_sim <- 15
+n_sim <- 25
 
 grado_simple <- 2
 grado_complejo <- 10
-grado_target <- 15
+grado_target <- 20
 
 ptos_muestra <- seq(60, 120, by = 10)
 sigma <- seq(0.5, 4, le = length(ptos_muestra))
@@ -95,7 +95,8 @@ for(j in 1:n_rows){
     x_out <- runif(n, -1, 1)
     target_determinista_out <- mclapply(x_out, evalua_target, qf = grado_target, a = a)
     target_determinista_out <- simplify2array(target_determinista_out)
-    y_out_true <- target_determinista_out
+    ruido_out <- rnorm(n, 0, sig)
+    y_out_true <- target_determinista_out + ruido_out
     y_pred_simple <- predict(modelo_simple, newdata = as.data.frame(x_out))
     y_pred_complejo <- predict(modelo_complejo, newdata = as.data.frame(x_out))
     
@@ -110,5 +111,5 @@ for(j in 1:n_rows){
   
 }
 
-chart <- ggplot(data = datos, aes(x = ptos_muestra, y = sigma, z = overfitt)) + geom_tile(aes(fill = overfitt))  + scale_fill_gradient2(low = "blue",mid = "green", high = "red")
+chart <- ggplot(data = datos, aes(x = ptos_muestra, y = sigma, fill = overfitt))  + scale_fill_gradient2(low = "blue",mid = "green", high = "red") + geom_raster(interpolate = TRUE)
 print(chart)
