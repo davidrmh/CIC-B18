@@ -111,5 +111,5 @@ for(j in 1:n_rows){
   
 }
 
-chart <- ggplot(data = datos, aes(x = ptos_muestra, y = sigma, fill = overfitt))  + scale_fill_gradient2(low = "blue",mid = "green", high = "red") + geom_raster(interpolate = TRUE)
+chart <- ggplot(data = datos, aes(x = ptos_muestra, y = sigma, fill = overfitt))  + scale_fill_gradient(low = "blue", high = "red") + geom_raster(interpolate = TRUE)
 print(chart)
