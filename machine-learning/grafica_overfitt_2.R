@@ -48,7 +48,7 @@ polinomio <- function(x,a, grado = 10){
   suma <- 0
   suma_norm <- 0
   for(i in 0:grado){
-    suma_norm <- suma_norm + x^(2*i)
+    suma_norm <- suma_norm + 1 / (2*i + 1)
     suma <- suma + a[i + 1]*(x^i)
   }
   return(suma / sqrt(suma_norm))
