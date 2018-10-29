@@ -62,54 +62,55 @@ polinomio <- function(x,a, grado = 10){
   return(suma / sqrt(suma_norm))
 }
 
-n_sim <- 25
+n_vs_sigma <- function(grado_simple = 2, grado_complejo = 10, grado_target = 20, n_sim = 25,
+                       n_ini = 60, n_fin = 120, sigma_ini = 0.5, sigma_fin = 4){
 
-grado_simple <- 2
-grado_complejo <- 10
-grado_target <- 20
-
-ptos_muestra <- seq(60, 120, by = 10)
-sigma <- seq(0.5, 4, le = length(ptos_muestra))
-datos <- expand.grid(sigma = sigma, ptos_muestra = ptos_muestra)
-n_rows <- dim(datos)[1]
-
-for(j in 1:n_rows){
-  vector_overfitt <- c() 
+  ptos_muestra <- seq(n_ini, n_fin, by = 10)
+  sigma <- seq(sigma_ini, sigma_fin, le = length(ptos_muestra))
+  datos <- expand.grid(sigma = sigma, ptos_muestra = ptos_muestra)
+  n_rows <- dim(datos)[1]
   
-  for(i in 1:n_sim){
+  for(j in 1:n_rows){
+    vector_overfitt <- c() 
     
-    sig <- datos$sigma[j]
-    n <- datos$ptos_muestra[j]
-    print(paste("Simulación = ", i," sigma = ", sig, " N = ", n, sep=""))
+    for(i in 1:n_sim){
+      
+      sig <- datos$sigma[j]
+      n <- datos$ptos_muestra[j]
+      print(paste("Simulación = ", i," sigma = ", sig, " N = ", n, sep=""))
+      
+      x_in <- runif(n, -1, 1)
+      ruido <- rnorm(n, 0, sig)
+      a <- rnorm(grado_target + 1)
+      
+      target_determinista_in <- mclapply(x_in, evalua_target, qf = grado_target, a = a)
+      target_determinista_in <- simplify2array(target_determinista_in)
+      y_in_true <- target_determinista_in + ruido
+      modelo_simple <- lm(y_in_true ~ x_in + I(x_in^2))
+      modelo_complejo <- lm(y_in_true ~ x_in + I(x_in^2) + I(x_in^3) + I(x_in^4) + I(x_in^5) + I(x_in^6) +I(x_in^7) + I(x_in^8) + I(x_in^9) + I(x_in^10))
+      
+      x_out <- runif(n, -1, 1)
+      target_determinista_out <- mclapply(x_out, evalua_target, qf = grado_target, a = a)
+      target_determinista_out <- simplify2array(target_determinista_out)
+      ruido_out <- rnorm(n, 0, sig)
+      y_out_true <- target_determinista_out + ruido_out
+      y_pred_simple <- predict(modelo_simple, newdata = as.data.frame(x_out))
+      y_pred_complejo <- predict(modelo_complejo, newdata = as.data.frame(x_out))
+      
+      error_simple <- mean((y_out_true - y_pred_simple)^2)
+      error_complejo <- mean((y_out_true - y_pred_complejo)^2)
+      
+      vector_overfitt <- c(vector_overfitt, error_complejo - error_simple)
+      
+    }
     
-    x_in <- runif(n, -1, 1)
-    ruido <- rnorm(n, 0, sig)
-    a <- rnorm(grado_target + 1)
-    
-    target_determinista_in <- mclapply(x_in, evalua_target, qf = grado_target, a = a)
-    target_determinista_in <- simplify2array(target_determinista_in)
-    y_in_true <- target_determinista_in + ruido
-    modelo_simple <- lm(y_in_true ~ x_in + I(x_in^2))
-    modelo_complejo <- lm(y_in_true ~ x_in + I(x_in^2) + I(x_in^3) + I(x_in^4) + I(x_in^5) + I(x_in^6) +I(x_in^7) + I(x_in^8) + I(x_in^9) + I(x_in^10))
-    
-    x_out <- runif(n, -1, 1)
-    target_determinista_out <- mclapply(x_out, evalua_target, qf = grado_target, a = a)
-    target_determinista_out <- simplify2array(target_determinista_out)
-    ruido_out <- rnorm(n, 0, sig)
-    y_out_true <- target_determinista_out + ruido_out
-    y_pred_simple <- predict(modelo_simple, newdata = as.data.frame(x_out))
-    y_pred_complejo <- predict(modelo_complejo, newdata = as.data.frame(x_out))
-    
-    error_simple <- mean((y_out_true - y_pred_simple)^2)
-    error_complejo <- mean((y_out_true - y_pred_complejo)^2)
-    
-    vector_overfitt <- c(vector_overfitt, error_complejo - error_simple)
+    datos$overfitt[j] <- mean(vector_overfitt)
     
   }
   
-  datos$overfitt[j] <- mean(vector_overfitt)
+  chart <- ggplot(data = datos, aes(x = ptos_muestra, y = sigma, fill = overfitt))  + scale_fill_gradient(low = "blue", high = "red") + geom_raster(interpolate = TRUE)
+  print(chart)
   
+    
 }
 
-chart <- ggplot(data = datos, aes(x = ptos_muestra, y = sigma, fill = overfitt))  + scale_fill_gradient(low = "blue", high = "red") + geom_raster(interpolate = TRUE)
-print(chart)
