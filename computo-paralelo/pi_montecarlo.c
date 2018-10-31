@@ -2,6 +2,9 @@
 #include <stdlib.h>
 #include <gsl/gsl_rng.h>
 #include <gsl/gsl_randist.h>
+#ifdef _OPENMP
+  #include <omp.h>
+#endif
 /* Programa para estimar PI utilizando simulación Monte Carlo
 
 Para compilar:
@@ -15,6 +18,9 @@ int main(int argc, char *argv[]){
 
   // argv[1] es el número de simulaciones
   long num_sim = atoi(argv[1]);
+
+  // argv[2] es el número de hilos
+  int n_threads = atoi(argv[2]);
 
   //radio
   float radio = 1.0;
@@ -34,17 +40,21 @@ int main(int argc, char *argv[]){
   //Contador de puntos que caen en el círculo
   long contador_adentro = 0;
 
-  for(i = 0; i < num_sim; i++){
+  #pragma omp parallel for private(u,x,y) num_threads(n_threads) reduction(+:contador_adentro)
+    for(i = 0; i < num_sim; i++){
 
-    u = gsl_rng_uniform (r);
-    x = -radio + (radio + radio)*u;
-    u = gsl_rng_uniform (r);
-    y = -radio + (radio + radio)*u;
+      u = gsl_rng_uniform (r);
+      x = -radio + (radio + radio)*u;
+      u = gsl_rng_uniform (r);
+      y = -radio + (radio + radio)*u;
 
-    if((x*x + y*y) <= radio2){
-      contador_adentro = contador_adentro + 1;
+      if((x*x + y*y) <= radio2){
+        /* Sin usar reduction, para que el código funcionara necesitaba poner este printf
+        printf("Para el hilo %d se tiene un punto en el círculo i = %d\n",omp_get_thread_num(),i);
+        */
+        contador_adentro = contador_adentro + 1;
+      }
     }
-  }
 
   //calcula PI
   float pi = (float) 4*contador_adentro / num_sim;
