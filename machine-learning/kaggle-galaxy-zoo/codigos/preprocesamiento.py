@@ -4,6 +4,7 @@ from PIL import Image
 import numpy as np
 import pandas as pd
 import pickle
+import glob
 
 ##==============================================================================
 ## Función para convertir una imagen en un arreglo numpy
@@ -120,7 +121,9 @@ def diccionario_imagenes(real = False):
         #Llena el diccionario
         dicc[galaxy_id] = {}
         dicc[galaxy_id]['target'] = targets
-        dicc[galaxy_id]['imagen'] = imagen
+        dicc[galaxy_id]['imagen'] = imagen.copy()
+
+        imagen.close()
 
     #guarda el diccionario
     arch_salida = open('diccionario_imagenes', 'wb')
@@ -128,3 +131,42 @@ def diccionario_imagenes(real = False):
     arch_salida.close()
 
     return dicc
+
+##==============================================================================
+## Función para convertir las imágenes de una carpeta en imágenes blanco y negro
+##==============================================================================
+def convierte_bw(fuente, destino, ext='.jpg'):
+    '''
+    ENTRADA
+    fuente: string con la ruta de la carpeta que contiene las imágenes a color
+    (e.g. '../all/images_training_1000/')
+
+    destino: string con las ruta de la carpeta en donde se guardarán las
+    imágenes en blanco y negro
+    (e.g. '../all/images_training_1000_BW/')
+
+    ext: string con la extensión de las imágenes
+
+    '''
+
+    #lista las imágenes en la ruta fuente
+    imagenes_color = glob.glob(fuente + '*' + ext)
+
+    #Abre cada imagen, la convierte en blanco y negro y la guarda en la ruta destino
+    for ruta in imagenes_color:
+
+        imagen_col = Image.open(ruta)
+
+        image_bw = imagen_col.convert('L')
+
+        #Obtiene el Id de la imagen
+        #ruta = '../all/images_training_1000/737688.jpg'
+        id_imagen = ruta.split('/')[-1].split('.')[0]
+
+        #guarda en la ruta destino
+        image_bw.save(destino + id_imagen + ext)
+
+        #cierra la imagen
+        imagen_col.close()
+
+    print 'Imagenes convertidas'
