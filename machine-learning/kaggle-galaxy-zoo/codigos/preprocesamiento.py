@@ -9,10 +9,12 @@ import glob
 ##==============================================================================
 ## Función para convertir una imagen en un arreglo numpy
 ##==============================================================================
-def imagen_a_arreglo(imagen):
+def imagen_a_arreglo(imagen, col = False):
     '''
     ENTRADA
     imagen: Objeto creado con la clase Image del módulo PIL (Image.open)
+
+    col: Boolean True =>Imagen a color (RGB) False => Imagen blanco y negro
 
     SALIDA
     arreglo: Arreglo de numpy con shape (w, h, 3)
@@ -23,7 +25,10 @@ def imagen_a_arreglo(imagen):
     height = imagen.size[1]
 
     #np.uint8 para tener compatibilidad con matplotlib
-    arreglo = np.array(imagen.getdata(), dtype = np.uint8).reshape(width, height, 3)
+    if col:
+        arreglo = np.array(imagen.getdata(), dtype = np.float32).reshape(width, height, 3)
+    else:
+        arreglo = np.array(imagen.getdata(), dtype = np.float32).reshape(width, height)
 
     return arreglo
 ##==============================================================================
@@ -170,3 +175,63 @@ def convierte_bw(fuente, destino, ext='.jpg'):
         imagen_col.close()
 
     print 'Imagenes convertidas'
+
+##==============================================================================
+## Crea el conjunto de entrenamiento
+##==============================================================================
+def crea_entrenamiento(fuente_imagenes, fuente_csv, ext = '.jpg', col = False):
+    '''
+    ENTRADA
+    fuente_imagenes: string con la ruta de la carpeta que contiene las imágenes
+    (e.g. '../all/images_training_1000/')
+
+    fuente_csv: string con la ruta del archivo csv que contiene los IDs y
+    las probabilidades objetivo
+
+    ext: string con la extensión de las imágenes
+
+    col: Boolean True => Imágenes a color, False => Imágenes en blanco y negro
+
+    SALIDA
+    x_train: Numpy array con dimensiónes [num_imagenes][1][width][height]
+
+    y_train: Numpy array con dimensiones [num_imagenes][37]
+
+    '''
+
+    #abre el archivo archivo csv
+    arch_csv = pd.read_csv(fuente_csv)
+
+    #número de imágenes
+    n = arch_csv.shape[0]
+
+    x_train = []
+    y_train = []
+
+    for i in range(0,n):
+        #id de la imagen
+        id_imagen = str(arch_csv['GalaxyID'][i])
+
+        #ruta de la imagen
+        ruta = fuente_imagenes + id_imagen + ext
+
+        #abre la imagen y la convierte en un arreglo
+        imagen = Image.open(ruta)
+        arreglo = imagen_a_arreglo(imagen, col)
+        imagen.close()
+
+        #obtiene las probabilidades objetivo correspondientes a la imagen
+        prob = np.array(arch_csv.iloc[i,1:])
+
+        #almacena
+        x_train.append(arreglo)
+        y_train.append(prob)
+
+    #convierte a numpy array
+    x_train = np.array(x_train)
+    y_train = np.array(y_train)
+
+    #redimensiona x_train
+    x_train = x_train.reshape(x_train.shape[0],1,x_train.shape[1], x_train.shape[2])
+
+    return x_train, y_train
