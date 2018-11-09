@@ -8,7 +8,7 @@
 /* Programa para estimar PI utilizando simulación Monte Carlo
 
 Para compilar:
-gcc -I /usr/local/include/gsl/ -o pi_montecarlo pi_montecarlo.c -lgsl -lgslcbla
+gcc -I /usr/local/include/gsl/ -o pi_montecarlo pi_montecarlo.c -lgsl -lgslcblas -fopenmp
 
 Uso
 ./pi_montecarlo NUM_SIM
@@ -40,7 +40,7 @@ int main(int argc, char *argv[]){
   //Contador de puntos que caen en el círculo
   long contador_adentro = 0;
 
-  #pragma omp parallel for private(u,x,y) num_threads(n_threads) reduction(+:contador_adentro)
+  #pragma omp parallel for private(u,x,y) num_threads(n_threads)
     for(i = 0; i < num_sim; i++){
 
       u = gsl_rng_uniform (r);
@@ -49,13 +49,11 @@ int main(int argc, char *argv[]){
       y = -radio + (radio + radio)*u;
 
       if((x*x + y*y) <= radio2){
-        /* Sin usar reduction, para que el código funcionara necesitaba poner este printf
-        printf("Para el hilo %d se tiene un punto en el círculo i = %d\n",omp_get_thread_num(),i);
-        */
+        #pragma omp critical
         contador_adentro = contador_adentro + 1;
       }
     }
-
+    
   //calcula PI
   float pi = (float) 4*contador_adentro / num_sim;
 
