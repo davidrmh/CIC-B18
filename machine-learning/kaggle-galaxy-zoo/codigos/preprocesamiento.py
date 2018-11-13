@@ -140,7 +140,7 @@ def diccionario_imagenes(real = False):
 ##==============================================================================
 ## Función para convertir las imágenes de una carpeta en imágenes blanco y negro
 ##==============================================================================
-def convierte_bw(fuente, destino, ext='.jpg'):
+def convierte_bw(fuente, destino, ext='.jpg', size = (45,45)):
     '''
     ENTRADA
     fuente: string con la ruta de la carpeta que contiene las imágenes a color
@@ -151,6 +151,8 @@ def convierte_bw(fuente, destino, ext='.jpg'):
     (e.g. '../all/images_training_1000_BW/')
 
     ext: string con la extensión de las imágenes
+
+    size: Tupla con el tamaño de las imágenes
 
     '''
 
@@ -163,6 +165,7 @@ def convierte_bw(fuente, destino, ext='.jpg'):
         imagen_col = Image.open(ruta)
 
         image_bw = imagen_col.convert('L')
+        image_bw = image_bw.resize(size)
 
         #Obtiene el Id de la imagen
         #ruta = '../all/images_training_1000/737688.jpg'
@@ -217,7 +220,7 @@ def crea_entrenamiento(fuente_imagenes, fuente_csv, ext = '.jpg', col = False):
 
         #abre la imagen y la convierte en un arreglo
         imagen = Image.open(ruta)
-        imagen = imagen.resize((128,128))
+        #imagen = imagen.resize((128,128))
         arreglo = imagen_a_arreglo(imagen, col)
         imagen.close()
 
