@@ -65,7 +65,7 @@ def crea_modelo(inputShape = (1, 128, 128)):
 
     #Última capa para predecir las probabilidades
     model.add(Dense(37))
-    model.add(Activation("softmax"))
+    model.add(Activation("relu"))
 
     return model
 ##==============================================================================
