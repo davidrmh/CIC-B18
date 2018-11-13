@@ -24,7 +24,7 @@ opt = Nadam(learning_rate)
 ##==============================================================================
 ## Función para crear el modelo
 ##==============================================================================
-def crea_modelo(inputShape = (1, 424, 424)):
+def crea_modelo(inputShape = (1, 128, 128)):
     '''
     ENTRADA
     inputShape: Tupla. Dimensiones los arreglos de entrada. Por default se
@@ -99,10 +99,11 @@ def entrena_modelo(model, x_train, y_train, epochs=50, loss='mean_squared_error'
     model.compile(loss = loss, optimizer = optim)
 
     #entrena
-    archivo_modelo = 'modelo-{epoch:02d}-{val_loss:.4f}.hdf5' #nombre del archivo con el checkpoint del modelo
+    archivo_modelo = 'modelo-{epoch:02d}.hdf5' #nombre del archivo con el checkpoint del modelo
     checkpoint = ModelCheckpoint(archivo_modelo, save_best_only=True, period = epochs_save)
     inicio = time.ctime()
-    historia = model.fit_generator(datagen.flow(x_train, y_train, batch_size = batch), steps_per_epoch = len(x_train)//batch, epochs = epochs, callbacks = [checkpoint])
+    historia = model.fit_generator(datagen.flow(x_train, y_train, batch_size = batch),
+     steps_per_epoch = int(len(x_train) / batch), epochs = epochs, callbacks = [checkpoint], use_multiprocessing=True, workers = 4, verbose = 1)
     fin = time.ctime()
 
     print 'Inicio ' + inicio + ' Fin ' + fin

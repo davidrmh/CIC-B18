@@ -217,6 +217,7 @@ def crea_entrenamiento(fuente_imagenes, fuente_csv, ext = '.jpg', col = False):
 
         #abre la imagen y la convierte en un arreglo
         imagen = Image.open(ruta)
+        imagen = imagen.resize((128,128))
         arreglo = imagen_a_arreglo(imagen, col)
         imagen.close()
 
