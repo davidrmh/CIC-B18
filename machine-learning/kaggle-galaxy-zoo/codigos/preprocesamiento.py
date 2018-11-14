@@ -180,7 +180,7 @@ def convierte_bw(fuente, destino, ext='.jpg', size = (45,45)):
     print 'Imagenes convertidas'
 
 ##==============================================================================
-## Crea el conjunto de entrenamiento
+## Crea el conjunto de entrenamiento (en memoria)
 ##==============================================================================
 def crea_entrenamiento(fuente_imagenes, fuente_csv, ext = '.jpg', col = False):
     '''
@@ -239,3 +239,22 @@ def crea_entrenamiento(fuente_imagenes, fuente_csv, ext = '.jpg', col = False):
     x_train = x_train.reshape(x_train.shape[0],1,x_train.shape[1], x_train.shape[2])
 
     return x_train, y_train
+
+##==============================================================================
+## Obtiene todos los archivos de cierta extensión en una carpeta
+##==============================================================================
+def lista_archivos(ruta, ext = '.jpg'):
+    '''
+    ENTRADA
+    ruta: String con la ruta de la carpeta
+    (e.g '../all/images_test_BW/')
+
+    ext: string con la extensión de los archivos (e.g '.jpg')
+
+    SALIDA
+    rutas: lista con la ruta para cada archivo en la carpeta
+    '''
+
+    rutas = glob.glob(ruta + '*' + ext)
+
+    return rutas
