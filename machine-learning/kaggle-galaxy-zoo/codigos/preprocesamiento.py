@@ -293,9 +293,16 @@ def generador(ruta_imagenes, csv_target, batch = 32):
             if 'BW' in ruta:
                 col = False
             else:
-                col = True    
+                col = True
             imagen = Image.open(ruta)
             arreglo = imagen_a_arreglo(imagen, col)
+
+            #Cambia la forma del arreglo con el fin de considerar los canales
+            #de acuerdo a si se usa o no imágenes con color
+            if col:
+                arreglo.shape = (1, arreglo.shape[0], arreglo.shape[1])
+            else:
+                arreglo.shape = (3, arreglo.shape[0], arreglo.shape[1])
             imagen.close()
 
             #Obtiene el ID de la imagen
@@ -313,4 +320,3 @@ def generador(ruta_imagenes, csv_target, batch = 32):
         y_batch = np.array(y_batch)
 
         yield (x_batch, y_batch)
-
