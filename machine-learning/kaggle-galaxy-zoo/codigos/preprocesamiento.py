@@ -1,6 +1,7 @@
 # coding: utf-8
 
 from PIL import Image
+from shutil import copyfile
 import numpy as np
 import pandas as pd
 import pickle
@@ -320,3 +321,56 @@ def generador(ruta_imagenes, csv_target, batch = 32):
         y_batch = np.array(y_batch)
 
         yield (x_batch, y_batch)
+
+##==============================================================================
+## Crear conjuntos de entrenamiento y validación
+##==============================================================================
+def crea_validacion(ruta_imagenes, ruta_entrenamiento, ruta_validacion, csv_target, ext = '.jpg', prop = 0.9):
+    '''
+    ENTRADA
+    ruta_imagenes: String con la ruta de la carpeta que contiene las imágenes
+    (e.g. '../all/images_training_rev1/')
+
+    ruta_entrenamiento: String con la ruta destino para las imágenes de entrenamiento
+
+    ruta_validacion: String con la ruta destino para las imágenes de validación
+
+    csv_target: Pandas dataframe con los galaxyID 
+
+    ext: String que indica la extensión de los archivos (e.g. '.jpg')
+
+    prop: float en (0,1) que representa la proporción del conjunto de entrenamiento
+
+    '''
+
+    #obtiene los IDs
+    ids = np.array(csv_target['GalaxyID'], dtype = str)
+
+    #obtiene los IDs del conjunto de entrenamiento
+    num_entrenamiento = int(prop * len(ids))
+    ids_entrenamiento = np.random.choice(ids, size = num_entrenamiento, replace = False)
+
+    lista_imagenes = lista_archivos(ruta_imagenes, ext)
+
+    #comienza a copiar cada imagen en su ruta correspondiente
+
+    for imagen in lista_imagenes:
+
+        #obtiene el id de la imagen
+        id_imagen = imagen.split('/')[-1].split('.')[0]
+
+        #revisa si está en el conjunto de entrenamiento
+        if id_imagen in ids_entrenamiento:
+            dest = ruta_entrenamiento + id_imagen + ext
+        else:
+            dest = ruta_validacion  + id_imagen + ext
+
+        #copia el archivo en su destino correspondiente
+        copyfile(imagen, dest)
+
+    
+    print 'Conjuntos de valiadcion y entrenamiento creados'
+
+
+
+
