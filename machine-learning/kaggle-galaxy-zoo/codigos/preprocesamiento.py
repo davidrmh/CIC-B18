@@ -258,3 +258,59 @@ def lista_archivos(ruta, ext = '.jpg'):
     rutas = glob.glob(ruta + '*' + ext)
 
     return rutas
+
+##==============================================================================
+## Generador de imágenes
+##==============================================================================
+def generador(ruta_imagenes, csv_target, batch = 32):
+    '''
+    ENTRADA
+    ruta_imagenes: lista con la ruta de cada imagen
+
+    csv_target: pandas dataframe cuya primer columna es el id de la imagen
+    y el resto de las columnas son las cantidades objetivo
+
+    batch: Entero que representa el tamaño del lote
+
+    SALIDA
+    tupla de la forma (x_batch, y_batch)
+    '''
+
+    while True:
+
+        #Selecciona los archivos del batch
+        ruta_batch = np.random.choice(ruta_imagenes, size = batch)
+
+        x_batch = []
+        y_batch = []
+
+        #Lee cada imagen
+
+        for ruta in ruta_batch:
+
+            #Abre la imagen y la guarda en un arreglo
+            #Determina automáticamente el color
+            if 'BW' in ruta:
+                col = False
+            else:
+                col = True    
+            imagen = Image.open(ruta)
+            arreglo = imagen_a_arreglo(imagen, col)
+            imagen.close()
+
+            #Obtiene el ID de la imagen
+            id_imagen = int(ruta.split('/')[-1].split('.')[0])
+
+            #Obtiene los target correspondientes
+            indice = csv_target[csv_target['GalaxyID'] == id_imagen].index[0]
+            target = np.array(csv_target.iloc[indice,1:])
+
+            #almacena
+            x_batch.append(arreglo)
+            y_batch.append(target)
+
+        x_batch = np.array(x_batch)
+        y_batch = np.array(y_batch)
+
+        yield (x_batch, y_batch)
+
