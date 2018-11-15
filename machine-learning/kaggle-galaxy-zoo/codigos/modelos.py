@@ -10,6 +10,7 @@ from keras.layers.core import Flatten
 from keras.layers.core import Dense
 from keras.optimizers import Nadam
 import time
+import preprocesamiento as pre
 
 ##==============================================================================
 ## Variables globales
@@ -71,12 +72,15 @@ def crea_modelo(inputShape = (1, 128, 128)):
 ##==============================================================================
 ## Función para entrenar un modelo
 ##==============================================================================
-def entrena_modelo(model, x_train, y_train, epochs=50, loss='mean_squared_error', datagen=datagen, batch=100, optim=opt, epochs_save= 10):
+def entrena_modelo(model, ruta_entrenamiento, csv_target, epochs=50, loss='mean_squared_error', datagen=datagen, batch=100, optim=opt, epochs_save= 10, ext = '.jpg'):
     '''
     ENTRADA
     model: Modelo creado con la función crea_modelo
 
-    x_train, y_train numpy arrays creados con la función crea_entrenamiento del modulo preprocesamiento
+    ruta_entrenamiento: String con la ruta de la carpeta con el conjunto de entrenamiento
+
+    csv_target: pandas dataframe cuya primer columna es el id de la imagen
+    y el resto de las columnas son las cantidades objetivo
 
     epochs: Entero, número de épocas.
 
@@ -90,6 +94,8 @@ def entrena_modelo(model, x_train, y_train, epochs=50, loss='mean_squared_error'
 
     epochs_save: Entero que representa cada cuantas épocas se guarda el modelo
 
+    ext: String con la extensión de los archivos (imágenes)s
+
     SALIDA
     modelo entrenado
     historia: Objeto con la historia del entrenamiento
@@ -98,12 +104,17 @@ def entrena_modelo(model, x_train, y_train, epochs=50, loss='mean_squared_error'
     #Compila el modelo
     model.compile(loss = loss, optimizer = optim)
 
+    #listas con las rutas de los archivos
+    arch_entrena = pre.lista_archivos(ruta_entrenamiento, ext)
+    #arch_valida = pre.lista_archivos(ruta_validacion, ext)
+
     #entrena
     archivo_modelo = 'modelo-{epoch:02d}.hdf5' #nombre del archivo con el checkpoint del modelo
     checkpoint = ModelCheckpoint(archivo_modelo, save_best_only=True, period = epochs_save)
     inicio = time.ctime()
-    historia = model.fit_generator(datagen.flow(x_train, y_train, batch_size = batch),
-     steps_per_epoch = int(len(x_train) / batch), epochs = epochs, callbacks = [checkpoint], use_multiprocessing=True, workers = 4, verbose = 1)
+    historia = model.fit_generator(generator = pre.generador(arch_entrena, csv_target, batch)
+        ,steps_per_epoch = int(len(arch_entrena) / batch), epochs = epochs
+        ,callbacks = [checkpoint],use_multiprocessing=True, workers = 8, verbose = 1)
     fin = time.ctime()
 
     print 'Inicio ' + inicio + ' Fin ' + fin
