@@ -142,7 +142,7 @@ def diccionario_imagenes(real = False):
 ##==============================================================================
 ## Función para convertir las imágenes de una carpeta en imágenes blanco y negro
 ##==============================================================================
-def convierte_bw(fuente, destino, ext='.jpg', size = (45,45)):
+def convierte_bw(fuente, destino, ext='.jpg', size = (45,45), bw_flag = True):
     '''
     ENTRADA
     fuente: string con la ruta de la carpeta que contiene las imágenes a color
@@ -156,6 +156,9 @@ def convierte_bw(fuente, destino, ext='.jpg', size = (45,45)):
 
     size: Tupla con el tamaño de las imágenes
 
+    bw_flag: Boolean que indice si sólo considerar redimensionamiento de las 
+    imágenes o considerar redimensión + blanco y negro
+
     '''
 
     #lista las imágenes en la ruta fuente
@@ -166,7 +169,9 @@ def convierte_bw(fuente, destino, ext='.jpg', size = (45,45)):
 
         imagen_col = Image.open(ruta)
 
-        image_bw = imagen_col.convert('L')
+        if bw_flag:
+            #convierte blanco y negro
+            image_bw = imagen_col.convert('L')
         image_bw = image_bw.resize(size)
 
         #Obtiene el Id de la imagen
