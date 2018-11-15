@@ -2,6 +2,7 @@
 
 from PIL import Image
 from shutil import copyfile
+from copy import deepcopy
 import numpy as np
 import pandas as pd
 import pickle
@@ -371,6 +372,40 @@ def crea_validacion(ruta_imagenes, ruta_entrenamiento, ruta_validacion, csv_targ
     
     print 'Conjuntos de valiadcion y entrenamiento creados'
 
+##==============================================================================
+## Copiar archivos de una carpeta origen a una destino
+##==============================================================================
+def copia_archivos(ruta_origen, ruta_destino, cantidad= 500, ext = '.jpg'):
+    '''
+    ENTRADA
 
+    ENTRADA
+    ruta_origen: String con la ruta de la carpeta que contiene las imágenes
+    (e.g. '../all/images_training_rev1/')
 
+    ruta_destino: String con la ruta destino para las imágenes
 
+    cantidad: Entero que representa el número de archivos a copiar
+
+    ext: String con la extensión de los archivos
+
+    '''
+
+    #lista de los archivos en ruta_origen
+    lista_arch = lista_archivos(ruta_origen)
+
+    #Selecciona al azar los archivos a copiar
+    lista_arch_copiar = np.random.choice(lista_arch, size = cantidad, replace = False)
+
+    #copia archivos
+    for archivo in lista_arch_copiar:
+
+        #nombre del archivo
+        nombre = archivo.split('/')[-1].split('.')[0]
+
+        #destino
+        dest = ruta_destino + nombre + ext
+
+        copyfile(archivo, dest)
+
+    print "Archivos copiados"    
