@@ -306,7 +306,7 @@ def generador(ruta_imagenes, csv_target, batch = 32):
 
             #Cambia la forma del arreglo con el fin de considerar los canales
             #de acuerdo a si se usa o no imágenes con color
-            if col:
+            if not col:
                 arreglo.shape = (1, arreglo.shape[0], arreglo.shape[1])
             else:
                 arreglo.shape = (3, arreglo.shape[0], arreglo.shape[1])
