@@ -1,5 +1,5 @@
 # coding: utf-8
-
+from keras.preprocessing.image import ImageDataGenerator
 from PIL import Image
 from shutil import copyfile
 from copy import deepcopy
@@ -7,6 +7,12 @@ import numpy as np
 import pandas as pd
 import pickle
 import glob
+
+##==============================================================================
+## VARIABLES GLOBALES
+##==============================================================================
+#Para hacer data augmentation
+datagen = ImageDataGenerator(rotation_range = 180, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True, vertical_flip = True, zoom_range = [1.0,3.0])
 
 ##==============================================================================
 ## Función para convertir una imagen en un arreglo numpy
@@ -311,6 +317,9 @@ def generador(ruta_imagenes, csv_target, batch = 32):
             else:
                 arreglo.shape = (3, arreglo.shape[0], arreglo.shape[1])
             imagen.close()
+
+            #Transformaciones al azar
+            arreglo = datagen.random_transform(x = arreglo, seed = 12345)
 
             #Obtiene el ID de la imagen
             id_imagen = int(ruta.split('/')[-1].split('.')[0])

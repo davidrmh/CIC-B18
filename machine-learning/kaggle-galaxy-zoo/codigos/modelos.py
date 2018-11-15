@@ -3,7 +3,6 @@
 from keras.models import Sequential
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
-from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
 from keras.layers.core import Activation
 from keras.layers.core import Flatten
@@ -15,8 +14,6 @@ import preprocesamiento as pre
 ##==============================================================================
 ## Variables globales
 ##==============================================================================
-#Para hacer data augmentation
-datagen = ImageDataGenerator(rotation_range = 180, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True, vertical_flip = True, zoom_range = [1.0,3.0])
 
 #Optimizador (Nesterov + Adam)
 learning_rate = 0.002
@@ -25,7 +22,7 @@ opt = Nadam(learning_rate)
 ##==============================================================================
 ## Función para crear el modelo
 ##==============================================================================
-def crea_modelo(inputShape = (1, 128, 128)):
+def crea_modelo(inputShape = (1, 120, 120)):
     '''
     ENTRADA
     inputShape: Tupla. Dimensiones los arreglos de entrada. Por default se
@@ -72,7 +69,7 @@ def crea_modelo(inputShape = (1, 128, 128)):
 ##==============================================================================
 ## Función para entrenar un modelo
 ##==============================================================================
-def entrena_modelo(model, ruta_entrenamiento, csv_target, epochs=50, loss='mean_squared_error', datagen=datagen, batch=100, optim=opt, epochs_save= 10, ext = '.jpg'):
+def entrena_modelo(model, ruta_entrenamiento, csv_target, epochs=20, loss='mean_squared_error', batch=100, optim=opt, epochs_save= 10, ext = '.jpg'):
     '''
     ENTRADA
     model: Modelo creado con la función crea_modelo
@@ -85,8 +82,6 @@ def entrena_modelo(model, ruta_entrenamiento, csv_target, epochs=50, loss='mean_
     epochs: Entero, número de épocas.
 
     loss: String función de pérdida
-
-    datagen: Objeto de la clase ImageDataGenerator
 
     batch: Tamaño del bloque de entrenamiento
 
