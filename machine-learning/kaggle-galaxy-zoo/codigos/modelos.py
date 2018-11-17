@@ -4,6 +4,8 @@ from keras.models import Sequential
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.callbacks import ModelCheckpoint
+from keras.layers.normalization import BatchNormalization
+from keras.layers import LeakyReLU
 from keras.layers.core import Activation
 from keras.layers.core import Flatten
 from keras.layers.core import Dense
@@ -31,38 +33,44 @@ def crea_modelo(inputShape = (1, 120, 120)):
     model = Sequential()
     #Convolucional con 48 filtros de 5x5 cada uno
     model.add(Conv2D(filters = 48, kernel_size = (5,5), padding = 'same', input_shape = inputShape, data_format = 'channels_first'))
+    model.add(BatchNormalization())
     #Función de activación ReLu
-    model.add(Activation("relu"))
+    model.add((LeakyReLU(alpha=0.3)))
     #Max pooling
     model.add(MaxPooling2D(pool_size=(3,3), strides=(3, 3), padding = 'same', data_format = 'channels_first'))
-
     model.add(Conv2D(filters = 96, kernel_size = (5,5), padding = 'same'))
-    model.add(Activation("relu"))
+    model.add(BatchNormalization())
+    model.add((LeakyReLU(alpha=0.3)))
     model.add(MaxPooling2D(pool_size=(2,2), strides=(2, 2), padding = 'same', data_format = 'channels_first'))
 
     model.add(Conv2D(filters = 192, kernel_size = (3,3), padding = 'same', data_format = 'channels_first'))
-    model.add(Activation("relu"))
+    model.add((LeakyReLU(alpha=0.3)))
 
     #model.add(Conv2D(filters = 192, kernel_size = (3,3), padding = 'same', data_format = 'channels_first'))
-    #model.add(Activation("relu"))
+    #model.add((LeakyReLU(alpha=0.3)))
 
     #model.add(Conv2D(filters = 384, kernel_size = (3,3), padding = 'same', data_format = 'channels_first'))
-    #model.add(Activation("relu"))
+    #model.add((LeakyReLU(alpha=0.3)))
 
     model.add(Conv2D(filters = 384, kernel_size = (3,3), padding = 'same', data_format = 'channels_first'))
-    model.add(Activation("relu"))
+    model.add(BatchNormalization())
+    model.add((LeakyReLU(alpha=0.3)))
     model.add(MaxPooling2D(pool_size=(3,3), strides=(3, 3), padding = 'same', data_format = 'channels_first'))
 
     #Fully connected
     model.add(Flatten())
     model.add(Dense(2048))
-    model.add(Activation("relu"))
+    model.add(BatchNormalization())
+    model.add((LeakyReLU(alpha=0.3)))
 
     #model.add(Dense(2048))
-    #model.add(Activation("relu"))
+    #model.add(BatchNormalization())
+    #model.add((LeakyReLU(alpha=0.3)))
+    
 
     #Última capa para predecir las probabilidades
     model.add(Dense(37))
+    model.add(BatchNormalization())
     model.add(Activation("relu"))
 
     return model
@@ -109,7 +117,7 @@ def entrena_modelo(model, ruta_entrenamiento, csv_target, epochs=20, loss='mean_
     inicio = time.ctime()
     historia = model.fit_generator(generator = pre.generador(arch_entrena, csv_target, batch)
         ,steps_per_epoch = int(len(arch_entrena) / batch), epochs = epochs
-        ,callbacks = [checkpoint],use_multiprocessing=True, workers = 8, verbose = 1)
+        ,callbacks = [checkpoint], verbose = 1)
     fin = time.ctime()
 
     print 'Inicio ' + inicio + ' Fin ' + fin
