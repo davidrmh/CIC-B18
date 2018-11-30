@@ -29,16 +29,45 @@ Con la digitalización de los mercados financieros, en particular, los mercados a
 
 Concretamente, técnicas relacionadas al aprendizaje automático han ganado notoriedad en los últimos años. Dentro de estas técnicas, aquellas que pertenecen a la categoría de "\textbf{cajas negras}" (e.g. máquinas de soporte vectorial, redes neuronales) son las que han tenido una mayor difusión, teniendo menor presencia las llamadas técnicas simbólicas "\textbf{cajas blancas}".
 
-En este trabajo, presento los avances obtenidos hasta el momento en la investigación relacionada a mi tema de tesis. Retomo primeramente algunos conceptos básicos para el entendimiento del tema mostrando posteriormente el estado del arte recolectado. Se muestran algunos ejercicios bajo del paradigma de "\textbf{cajas negras}" y se señala el camino a tomar para el cuarto semestre, en el cual se realizarán ejercicios bajo el paradigma de "\textbf{cajas blancas}".
+En este trabajo, presento los avances obtenidos hasta el momento en la investigación relacionada a mi tema de tesis. Retomo primeramente algunos conceptos básicos para el entendimiento del tema y posteriormente se analiza el estado del arte recolectado. Se muestran algunos ejercicios bajo del paradigma de "\textbf{cajas negras}" y se señala el camino a tomar para el cuarto semestre, en el cual se realizarán ejercicios bajo el paradigma de "\textbf{cajas blancas}".
 
-
-	
 \end{abstract}
 
 
-\section{Introduction}	
+\section{Conceptos Básicos}
 
-The increase in computing power, the digitalization of financial markets and the opportunity of generate big profits, have motivated to a large degree the research and development of computational algorithms whose purpose is the guidance in the investment decision process.
+\subsection{El sistema financiero}
+
+El sistema financiero se compone de distintos tipos de mercados (e.g. accionario, deuda, cambiario) junto con la participación de distintos intermediarios (personas físicas o morales) los cuales buscan la transferencia de activos (tangibles o intangibles) de un lugar a otro y de un punto en el tiempo a otro.
+
+Los intermediarios recurren al sistema financiero principalmente por las siguientes razones:
+
+\begin{itemize}
+	\item Ahorrar dinero para el futuro.
+	\item Pedir prestado dinero para utilizarlo en el presente.
+	\item Reunir capital para proyectos de inversión futuros.
+	\item Administrar riesgos.
+\end{itemize}
+
+Dado lo anterior, resulta evidente entonces, que la principal función del sistema financiero es facilitar la negociación entre los intermediarios que participan en el.
+
+\subsection{Acciones y títulos referenciados a acciones}
+Para financiar sus proyectos de inversión, las compañías pueden recurrir a distintas formas de financiamiento, entre ellas:
+
+\begin{itemize}
+	\item Solicitar un préstamo ante una entidad de crédito.
+	\item Emisión o venta de acciones a los inversionistas (accionistas).
+\end{itemize}
+
+La primera de estas opciones implica una deuda que se tendrá que pagar (con intereses) en un tiempo futuro; mientras que la segunda involucra ceder una fracción de la compañía hacia los inversionistas, así como garantizarles ciertos derechos sobre los activos de esta.
+
+Así pues, podemos decir que una \textbf{acción} es un activo financiero que representa cierta proporción de los activos de la compañía.
+
+De acuerdo a la página de la Bolsa Mexicana de Valores\footnote{https://www.bmv.com.mx/es/mercados/instrumentos}:
+
+\textit{Los \textbf{Títulos referenciados a acciones (TRAC's)} son certificados de participación que representan el patrimonio de fideicomisos de inversión y que mantienen en posición canastas de acciones de empresas cotizadas en bolsa} (en castellano: un TRAC es un activo financiero que representa el comportamiento de un conjunto de acciones)
+
+En México, el TRAC más importante es el \textbf{NAFTRAC ISHRS} el cual está referenciado a las acciones que componen el Índice de Precios y Cotizaciones (S\&P/BMV IPC), el principal indicador del mercado accionario mexicano.
 
 Even when the basic idea is: "buy low and sell high", given the uncertainty of financial markets, this research has used mathematical and computational techniques in order to create models that help in the trading decisions (when is the right time to buy or sell). Namely, the use of techniques in the field of artificial intelligence have gained notoriety.
 
@@ -288,7 +317,7 @@ The future directions for this work might be:
 
 \newpage 
 \bibliographystyle{splncs04}
-\bibliography{referencias_articulo}{}
+\bibliography{referencias}{}
 
 
 
