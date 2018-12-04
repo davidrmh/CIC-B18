@@ -63,9 +63,10 @@ La primera de estas opciones implica una deuda que se tendrá que pagar (con inte
 
 Así pues, podemos decir que una \textbf{acción} es un activo financiero que representa cierta proporción de los activos de la compañía.
 
-De acuerdo a la página de la Bolsa Mexicana de Valores\footnote{https://www.bmv.com.mx/es/mercados/instrumentos}:
+\subsubsection{Títulos referenciados a acciones (TRAC's) \\}
 
-\textit{Los \textbf{Títulos referenciados a acciones (TRAC's)} son certificados de participación que representan el patrimonio de fideicomisos de inversión y que mantienen en posición canastas de acciones de empresas cotizadas en bolsa} (en términos simples, un TRAC es un activo financiero que representa el comportamiento de un conjunto de acciones)
+De acuerdo a la página de la Bolsa Mexicana de Valores\footnote{https://www.bmv.com.mx/es/mercados/instrumentos}:\\
+\textit{los \textbf{Títulos referenciados a acciones (TRAC's)} son certificados de participación que representan el patrimonio de fideicomisos de inversión y que mantienen en posición canastas de acciones de empresas cotizadas en bolsa} (en términos simples, un TRAC es un activo financiero que representa el comportamiento de un conjunto de acciones)
 
 En México, el TRAC más importante es el \textbf{NAFTRAC ISHRS} el cual está referenciado a las acciones que componen el Índice de Precios y Cotizaciones (S\&P/BMV IPC), el principal indicador del mercado accionario mexicano.
 
@@ -90,15 +91,25 @@ En la práctica, los mercados financieros no se consideran completamente eficient
 
 \subsubsection{Formas de eficiencia en el mercado\\}
 
-Se consideran tres formas de eficiencia en el mercado (citar trabajo de Fama) de acuerdo al tipo de información reflejada:\\
-
-\begin{tabular}{|c|c|c|c|}
-\hline Forma de eficiencia & Precios históricos & Información pública & Información privada \\ 
-\hline Débil &  &  &  \\ 
-\hline Semi fuerte &  &  &  \\ 
-\hline Fuerte &  &  &  \\ 
+Se consideran tres formas de eficiencia en el mercado, \cite{Fama1965}, de acuerdo al tipo de información reflejada:\\
+\begin{table}
+\caption{Formas de eficiencia en el mercado}
+\label{tabla-formas-eficiencia}
+\centering	
+\begin{tabular}{p{3.0cm}p{3.0cm}p{3.0cm}p{3.5cm}}
+\hline \textbf{Eficiencia} & \textbf{Precios históricos} & \textbf{Información pública} & \textbf{Información privada} \\ 
+\hline Débil & \checkmark  &  &  \\ 
+\hline Semi fuerte & \checkmark & \checkmark &  \\ 
+\hline Fuerte & \checkmark & \checkmark & \checkmark \\ 
 \hline 
 \end{tabular} 
+\end{table}
+
+En su forma débil, los precios reflejan eficientemente toda la información histórica generada por el mercado (precios de apertura, cierre, máximos, mínimos, volumen) por lo tanto, los inversionistas no pueden predecir los precios futuros sólamente extrapolando la información histórica.
+
+En su forma semi fuerte, los precios reflejan toda la información pública conocida y disponible; esta información incluye tanto la información revelada en los estados financieros de las compañías como la información generada por el mercado. Es claro entonces que un mercado con eficiencia semi fuerte, también es débilmente eficiente y además cualquier intento de utilizar la información pública disponible será insustancial al momento de predecir los precios del futuro.
+
+Finalmente, un mercado con eficiencia fuerte es aquel en el que los precios reflejan completamente tanto la información pública como la privada (aquella que sólo unos cuantos poseen) y por lo tanto, el uso de esta información para predecir los precios futuros no tiene trascendencia.
 
 \subsubsection{Estrategia Buy and Hold\\}
 
@@ -112,7 +123,7 @@ En un mercado eficiente, los inversionistas optarán por seguir una estrategia de
 
 En inglés, esta estrategia se conoce como \textbf{Buy and Hold} y será la estrategia utilizada como referencia.
 
-Por otra lado, en un mercado ineficiente, los inversionistas optarán por seguir una estrategia de \textbf{inversión activa}. Este tipo de inversión busca generar ganancias superiores a aquellas generadas por la inversión pasiva y consiste en lo siguiente: 
+Por otra lado, en un mercado ineficiente, los inversionistas optarán por seguir una estrategia de \textbf{inversión activa}. Este tipo de inversión busca generar ganancias superiores a aquellas generadas por la inversión pasiva y consiste en: 
 
 \begin{itemize}
 	\item[-] Fijar un periodo de tiempo $[0,T]$.
@@ -122,96 +133,36 @@ Por otra lado, en un mercado ineficiente, los inversionistas optarán por seguir 
 
 En donde las variables $\tau$ y $P$ son variables aleatorias.
 
-\subsubsection{Implicaciones del mercado eficiente\\}
-
-\section{State of the art}
-
-In order to find trading strategies that beat consistently the \textit{Buy and Hold} strategy, several artificial intelligence techniques have been explored, for example, one of the first works using such techniques is \cite{Allen1999}, in which genetic programming is used in order to create the strategies; in this work U.S. stock market is analyzed using \textit{S\&P 500} stock index as a benchmark, they consider transaction costs but don't get favorable results.\\
+Si el mercado es ineficiente, entonces existe una estrategia de inversión activa que generará ingresos netos (es decir, considerando costos de transacción) superiores a aquellos generados por una inversión pasiva.
 
 
-In \cite{Leigh2002}, chart heuristics are used for detecting a chart pattern called \textit{bull flag}; they beat \textit{Buy and Hold} strategy but they do not consider transaction costs.\\
+\section{Estado del arte}
 
-In \cite{Potvin2004}, the work from \cite{Allen1999} is taken up, omitting transaction costs and considering another way of creating the trees. They obtain positive results in stable and bearish (trending down) markets, but not in bullish (trending up) markets. \\
+En la búsqueda de estrategias de inversión activa que superen a la estrategia \textit{Buy and Hold}, se han explorado distintas técnicas relacionadas al área de inteligencia artificial, por ejemplo, uno de los primeros trabajos es el de \cite{Allen1999}, en el cual se utiliza programación genética para encontrar un conjunto de reglas que permiten indicar los momentos de compra, venta o espera; en este trabajo se analiza el mercado accionario de Estados Unidos utilizando el índice accionario \textit{S\&P 500} (este índice representa a las mejores 500 empresas de Estados Unidos) como instrumento de referencia, se consideran costos de transacción pero no logran vencer las ganancias de la inversión pasiva.\\
 
+En \cite{Leigh2002}, se utilizan heurísticas (\textit{template matching}) basadas en los patrones de la gráfica del precio del índice accionario NYSE Composite (Estados Unidos), se obtienen ganancias superiores a la inversión pasiva pero no se consideran costos de transacción.\\
 
-The authors in \cite{Scott2010} also use genetic programming in order to determine the strategies, being the main difference the use of monthly prices (not daily as is the usual practice); they consider transaction costs and beat \textit{Buy and Hold} strategy.\\
+En \cite{Potvin2004}, se retoma el trabajo de \cite{Allen1999} omitiendo costos de transacción y considerando una forma distinta de generar la población de árboles. Vencen a la estrategia Buy and Hold únicamente en mercados estables o a la baja, pero no logran vencerla en mercados a la alza. En este trabajo en lugar de utilizar índices accionarios se analizan acciones individuales del mercado de Canadá.\\
 
-\cite{Leitao2016} use \textit{Perceptually Important Points} (PIP) and \textit{Symbolic Aggregate Approximation} (SAX) in order to reduce the dimensionality of the data and express it using symbols, once they have these symbols they use a genetic algorithm for obtaining the trading strategy. They obtain positive results but don't consider transaction costs.\\
-
-
-In \cite{Kampouridis2017} an event-based time scale is considered and \textit{directional changes} are defined. Using this concept they are able to generate buy and sell signals that beat \textit{Buy and Hold} strategy even when considering transaction costs and risk adjusted performance.
-
-The authors in \cite{Huang2015}, propose the use of biclustering mining to discover effective technical trading patterns that contain a combination of indicators from historical financial data series. A modified K nearest neighborhood method is applied to classification of trading days in the testing period. They outperform \textit{Buy and Hold} strategy but don't consider transaction costs.
-
-Finally in \cite{Zhang2015} , an evolutionary trend reversion model, based on an extension of the XCS (extended classifier system) algorithm, is proposed. They beat \textit{Buy and Hold} strategy and obtain favorable results analyzing several risk-adjusted performance measures. In this work the model obtained is a set of \textit{if..then} rules.
-
-\section{Basic Concepts in Finance}
-
-\subsection{Technical Analysis}
-
-According to \cite{tabook}, in its basic form, technical analysis is the study of historical prices and volume from a stock series in order to determine future trends on its price. The basic assumptions for this kind of analysis are:
-
-\begin{itemize}
-	\item Prices are uniquely determined by the interaction between supply and demand.
+Siguiendo la línea de programación genética, los autores en \cite{Scott2010} utilizan no sólamente precios diarios, como lo hicieron los trabajos previamente mencionados, si no que también consideran precios semanales y mensuales. Utilizan el índice \textit{S\&P 500} como instrumento de referencia y logran vencer la estrategia Buy and Hold aún considerando costos de transacción.\\
 	
-	\item Prices move following trends.
-	
-	\item Changes in supply and demand cause trend reversions.
-	
-	\item Changes in supply and demand can be detected using charts.
-	
-	\item Patterns in charts tend to repeat.
-\end{itemize}
-
-Technical analysis also makes the assumption that the information of all factors (including psychological factors such as greed, fear, miss information, etc...) affecting supply and demand curves, is already reflected in the stock's price.
+\cite{Canelas2012, Canelas2013, Leitao2016} Son una serie de trabajos en los cuales se definen los \textit{Puntos Perceptualmente Importantes (Perceptually Important Points, PIP)} y se utiliza un método llamado \textit{Aproximación Agregada Simbólica, (Symbolic Aggregate Approximation, SAX)}; con estas dos herramientas es posible reducir la dimensionalidad de la serie de tiempo (sólo se consideran los "puntos importantes", en lugar de la serie en su totalidad) y a su vez convertirla en una serie de símbolos (letras de un alfabeto) finalmente se aplica un algoritmo evolutivo para identificar los patrones de símbolos que nos permiten obtener una buena estrategia. Se analiza el mercado de Estados Unidos utilizando el índice \textit{S\&P 500} y obtienen mejores resultados que la estrategia Buy and Hold aunque no consideran costos de transacción.
 
 
-\subsection{Efficient Market Hypothesis (EMH)}
-
-This hypothesis, proposed by Nobel prize winner Eugene Fama in the 60's, states that all the observed changes in the prices are caused only by the new available information, that is, historical data (of any kind) has no relevance when determining future trends. In particular, this hypothesis tell us that the use of technical analysis is unprofitable. 
-There are three versions of EMH:
-
-\subsubsection{Weak version of EMH}
-
-In its weak version, the Efficient Market Hypothesis, states that historical prices don't affect future price movements, thus, technical analysis is futile for the generation of trading strategies.
-This version only refers to historical prices and volume and it leaves the door open for other type of data such as financial statements reports or news.
+En \cite{Kampouridis2017} se considera una escala de tiempo basada en eventos y se definen los \textit{cambios direccionales}. Utilizando este concepto se generan estrategias capaces de vencer a la estrategia Buy and Hold aún considerando costos de transacción. Este artículo no analiza el mercado accionario, si no que analiza el mercado de divisas.
 
 
-\subsubsection{Semi-strong version of EMH}
-In its semi-strong version, the Efficient Market Hypothesis, states that publicly available historical information (prices, financial statements reports, news, etc..) is useless when predicting future price movements. Thus, only private/classified information might be useful for predicting future trends.
+Los autores en \cite{Huang2015}, proponen utilizar un biagrupamiento (biclustering) para descubrir patrones, este biagrupamiento agrupa tanto en la dimensión del tiempo como en la dimesión de los atributos. Una vez obtenidos los grupos para cada decisión (compra, venta o espera), se utiliza una modificación del método de K vecinos más cercanos con el fin de obtener una decisión para el día en cuestión. Obtienen resultados favorecedores analizando distintos mercados accionarios (Estados Unidos, Asia, Canadá) pero no consideran costos de transacción.
 
-\subsubsection{Strong version of EMH}
-Finally, in its strong version, the hypothesis states that even private/classified information can't be used to outperform the market.
+\cite{Preen2010, Zhang2015} Utilizan una metodología llamada \textit{Extended Classifier Systems, XCS} la cual les permite obtener un conjunto de reglas \textit{if-then} para decidir la acción a tomar en el día en cuestión. \cite{Zhang2015} analiza el mercado de índices accionarios de la bolsa de Shangai y vence a la estrategia Buy and Hold considerando costos de transacción, mientras que \cite{Preen2010} analiza diferentes acciones e índices accionarios venciendo a la estrategia Buy and Hold en la mayoría de los casos, considerando también costos de transacción.
 
 
-\subsection{Buy and Hold strategy (BH)}
-This is the strategy proposed by the Efficient Market Hypothesis, and consists of the following actions:
-
-\begin{itemize}
-	\item[-] Fix a time period $[0,T]$.
-	\item[-] Buy at time $0$ at price $P_{0}$.
-	\item[-] Sell at time $T$ at price $P_{T}$.
-	\item[-] The percetange profit (loss) is given by $\dfrac{P_{T}-P_{0}}{P_{0}}$.
-\end{itemize}
-
-According to the EMH, the profit (loss) obtained by the BH strategy is the maximum (minimum) profit (loss) that one can obtain in a systematic way. Hence, this strategy will be used as a benchmark when comparing with our proposed algorithms.
-
-
-\subsection{Titles Referenced to Shares}
-According to Mexican Stock Exchange's website \footnote{https://www.bmv.com.mx/en/markets/instruments}, the Mexican market has Titles Referenced to Shares (TRAC's), which are participation certificates representing equity investment trusts. Their primary objective is to replicate the behavior of the stocks or portfolio which they're referred to (underlying), that is, TRAC's are Exchange Traded Funds (ETFs).
-
-The most important TRAC is the one that represents the Mexican Stock Market as a whole and it is called NAFTRAC.
-
-Thus, our objective is finding trading strategies able to beat BH strategy using NAFTRAC data.
-
-
-\section{Experiments and Results}
+\section{Primeros experimentos (cajas negras)}
 \subsection{Datasets}
 
 We used daily price data (open price, maximum price, minimum price, adjusted close price) from Yahoo Finance \footnote{https://finance.yahoo.com/} for NAFTRAC for a time period between February 4th 2014 up to April 5th 2018.
 
 Worth mention that this is an unlabeled dataset, hence, we first need to find a way to label it in order to use supervised pattern recognition techniques. The approach taken is based on the idea of "given the historical prices, what should one have had to do in order to make profits?"
-
 
 \subsubsection{Training set and test set}
 
