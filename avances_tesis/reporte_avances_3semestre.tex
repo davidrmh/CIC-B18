@@ -29,10 +29,26 @@ Con la digitalización de los mercados financieros, en particular, los mercados a
 
 Concretamente, técnicas relacionadas al aprendizaje automático han ganado notoriedad en los últimos años. Dentro de estas técnicas, aquellas que pertenecen a la categoría de "\textbf{cajas negras}" (e.g. máquinas de soporte vectorial, redes neuronales) son las que han tenido una mayor difusión, teniendo menor presencia las llamadas técnicas simbólicas "\textbf{cajas blancas}".
 
-En este trabajo, presento los avances obtenidos hasta el momento en la investigación relacionada a mi tema de tesis. Retomo primeramente algunos conceptos básicos para el entendimiento del tema y posteriormente se analiza el estado del arte recolectado. Se muestran algunos ejercicios bajo del paradigma de "\textbf{cajas negras}" y se señala el camino a tomar para el cuarto semestre, en el cual se realizarán ejercicios bajo el paradigma de "\textbf{cajas blancas}".
+En este trabajo, presento los avances obtenidos hasta el momento en la investigación relacionada a mi tema de tesis. Retomo primeramente algunos conceptos básicos para el entendimiento del tema y posteriormente se analiza el estado del arte recolectado hasta el momento. Se muestran algunos ejercicios bajo del paradigma de "\textbf{cajas negras}" y se señala el camino a tomar para el cuarto semestre, en el cual se realizarán ejercicios bajo el paradigma de "\textbf{cajas blancas}".
 
 \end{abstract}
 
+\section{Objetivos}
+
+\subsection{Objetivo general}
+Dentro del paradigma simbólico o subsimbólico, proponer un método o algoritmo para aprender de manera automática un conjunto de reglas para operar en el mercado accionario mexicano.
+
+\subsection{Objetivos particulares}
+\begin{itemize}
+	\item Selección de atributos relevantes.
+	
+	\item Proponer una técnica simbólica o subsimbólica y realizar distintos experimentos.
+	
+	\item Evaluar los resultados de dichos experimentos.
+	
+	\item Comparar contra la hipótesis del mercado eficiente (versión débil).
+	
+\end{itemize}
 
 \section{Conceptos Básicos}
 
@@ -70,15 +86,18 @@ De acuerdo a la página de la Bolsa Mexicana de Valores\footnote{https://www.bmv.
 
 En México, el TRAC más importante es el \textbf{NAFTRAC ISHRS} el cual está referenciado a las acciones que componen el Índice de Precios y Cotizaciones (S\&P/BMV IPC), el principal indicador del mercado accionario mexicano.
 
-\subsection{Análisis técnico}
-Al momento de invertir, aún cuando la idea básica es \textit{comprar barato y vender caro}, dada la incertidumbre en los mercados financieros, se han desarrollado distintas técnicas para analizar la información financiera.
+Ya que refleja de manera general el mercado mexicano, este instrumento será sobre el cual estaremos realizando las operaciones de compra y venta.
 
-El análisis técnico es una forma de análisis financiero el cual utiliza precios y volúmenes históricos para guiar la toma de decisiones. Generalmente, este tipo de análisis recurre al uso de gráficas para descubrir patrones y tendencias en los precios.
+\subsection{Análisis técnico}
+Al momento de invertir, aún cuando la idea básica es \textit{comprar barato y vender caro}, dada la incertidumbre en los mercados financieros, se han desarrollado distintas técnicas para analizar la información que estos generan.
+
+El análisis técnico es una forma de análisis financiero la cual utiliza solamente precios y volúmenes históricos para guiar la toma de decisiones. Generalmente, este tipo de análisis recurre al uso de gráficas para descubrir patrones y tendencias en los precios.
 
 Además, el análisis técnico podría considerarse como el estudio colectivo de la psicología de los inversionistas; ya que, al sólo analizar precios y volúmenes, se analiza el sentimiento de aquellos inversionistas que efectivamente realizaron una transacción (es decir, aquellos inversionistas que lograron realizar una compra o una venta).
 
+
 \subsubsection{Indicadores técnicos}
-Además de utilizar herramientas gráficas para la toma de decisiones, el análisis técnico se vale de los llamados "indicadores técnicos". Estos indicadores, son medidas basadas en el precio, volumen o flujos de fondos que pueden ser utilizadas para predecir cambios en los precios.
+Además de utilizar herramientas gráficas para la toma de decisiones, el análisis técnico se vale de los llamados "indicadores técnicos". Estos indicadores, son medidas basadas en el precio, volumen o flujos de fondos que pueden ser utilizadas para predecir cambios en los precios. En otras palabras, los indicadores técnicos son transformaciones realizadas a las series de tiempo de los precios originales, por ejemplo, promedios móviles de los precios de cierre.
 
 \subsection{Hipótesis del mercado eficiente}
 La eficiencia de un mercado se refiere a la rapidez en que los precios de este reflejan la información disponible. Si los precios no reflejan totalmente la información, entonces la recopilación y procesamiento de esta podría generar ganancias anormales.
@@ -92,22 +111,22 @@ En la práctica, los mercados financieros no se consideran completamente eficient
 \subsubsection{Formas de eficiencia en el mercado\\}
 
 Se consideran tres formas de eficiencia en el mercado, \cite{Fama1965}, de acuerdo al tipo de información reflejada:\\
-\begin{table}
+\begin{table}[H]
 \caption{Formas de eficiencia en el mercado}
 \label{tabla-formas-eficiencia}
 \centering	
 \begin{tabular}{p{3.0cm}p{3.0cm}p{3.0cm}p{3.5cm}}
 \hline \textbf{Eficiencia} & \textbf{Precios históricos} & \textbf{Información pública} & \textbf{Información privada} \\ 
 \hline Débil & \checkmark  &  &  \\ 
-\hline Semi fuerte & \checkmark & \checkmark &  \\ 
+\hline Semifuerte & \checkmark & \checkmark &  \\ 
 \hline Fuerte & \checkmark & \checkmark & \checkmark \\ 
 \hline 
 \end{tabular} 
 \end{table}
 
-En su forma débil, los precios reflejan eficientemente toda la información histórica generada por el mercado (precios de apertura, cierre, máximos, mínimos, volumen) por lo tanto, los inversionistas no pueden predecir los precios futuros sólamente extrapolando la información histórica.
+En su forma débil, los precios reflejan eficientemente toda la información histórica generada por el mercado (precios de apertura, cierre, máximos, mínimos, volumen) por lo tanto, los inversionistas no pueden predecir los precios futuros sólamente extrapolando la información histórica.\\
 
-En su forma semi fuerte, los precios reflejan toda la información pública conocida y disponible; esta información incluye tanto la información revelada en los estados financieros de las compañías como la información generada por el mercado. Es claro entonces que un mercado con eficiencia semi fuerte, también es débilmente eficiente y además cualquier intento de utilizar la información pública disponible será insustancial al momento de predecir los precios del futuro.
+En su forma semifuerte, los precios reflejan toda la información pública conocida y disponible; esta información incluye tanto la información revelada en los estados financieros de las compañías como la información generada por el mercado. Es claro entonces que un mercado con eficiencia semifuerte, también es débilmente eficiente y además cualquier intento de utilizar la información pública disponible será insustancial al momento de predecir los precios del futuro.\\
 
 Finalmente, un mercado con eficiencia fuerte es aquel en el que los precios reflejan completamente tanto la información pública como la privada (aquella que sólo unos cuantos poseen) y por lo tanto, el uso de esta información para predecir los precios futuros no tiene trascendencia.
 
@@ -121,7 +140,7 @@ En un mercado eficiente, los inversionistas optarán por seguir una estrategia de
 	\item[-] Vender en $T$ a un precio $P_{T}$.
 \end{itemize}
 
-En inglés, esta estrategia se conoce como \textbf{Buy and Hold} y será la estrategia utilizada como referencia.
+En inglés, esta estrategia se conoce como \textbf{Buy and Hold} y será la estrategia representativa de la hipótesis del mercado eficiente.
 
 Por otra lado, en un mercado ineficiente, los inversionistas optarán por seguir una estrategia de \textbf{inversión activa}. Este tipo de inversión busca generar ganancias superiores a aquellas generadas por la inversión pasiva y consiste en: 
 
@@ -133,7 +152,8 @@ Por otra lado, en un mercado ineficiente, los inversionistas optarán por seguir 
 
 En donde las variables $\tau$ y $P$ son variables aleatorias.
 
-Si el mercado es ineficiente, entonces existe una estrategia de inversión activa que generará ingresos netos (es decir, considerando costos de transacción) superiores a aquellos generados por una inversión pasiva.
+Si el mercado es ineficiente, entonces existe una estrategia de inversión activa que generará ingresos netos (es decir, después de considerar costos de transacción) superiores a aquellos generados por una inversión pasiva.
+
 
 
 \section{Estado del arte}
@@ -152,28 +172,41 @@ Siguiendo la línea de programación genética, los autores en \cite{Scott2010} uti
 En \cite{Kampouridis2017} se considera una escala de tiempo basada en eventos y se definen los \textit{cambios direccionales}. Utilizando este concepto se generan estrategias capaces de vencer a la estrategia Buy and Hold aún considerando costos de transacción. Este artículo no analiza el mercado accionario, si no que analiza el mercado de divisas.
 
 
-Los autores en \cite{Huang2015}, proponen utilizar un biagrupamiento (biclustering) para descubrir patrones, este biagrupamiento agrupa tanto en la dimensión del tiempo como en la dimesión de los atributos. Una vez obtenidos los grupos para cada decisión (compra, venta o espera), se utiliza una modificación del método de K vecinos más cercanos con el fin de obtener una decisión para el día en cuestión. Obtienen resultados favorecedores analizando distintos mercados accionarios (Estados Unidos, Asia, Canadá) pero no consideran costos de transacción.
+Los autores en \cite{Huang2015}, proponen utilizar un biagrupamiento (biclustering) para descubrir patrones, este biagrupamiento agrupa tanto en la dimensión del tiempo como en la dimesión de los atributos. Una vez obtenidos los grupos para cada decisión (compra, venta o espera), se utiliza una modificación del método de K vecinos más cercanos, con el fin de obtener una decisión para el día en cuestión. Obtienen resultados favorecedores analizando distintos mercados accionarios (Estados Unidos, Asia, Canadá) pero no consideran costos de transacción.
 
-\cite{Preen2010, Zhang2015} Utilizan una metodología llamada \textit{Extended Classifier Systems, XCS} la cual les permite obtener un conjunto de reglas \textit{if-then} para decidir la acción a tomar en el día en cuestión. \cite{Zhang2015} analiza el mercado de índices accionarios de la bolsa de Shangai y vence a la estrategia Buy and Hold considerando costos de transacción, mientras que \cite{Preen2010} analiza diferentes acciones e índices accionarios venciendo a la estrategia Buy and Hold en la mayoría de los casos, considerando también costos de transacción.
+\cite{Preen2010, Zhang2015} Utilizan una metodología llamada \textit{Extended Classifier Systems, XCS} la cual, utilizando aprendizaje reforzado junto con heurísticas evolutivas, les permite obtener un conjunto de reglas \textit{if-then} para decidir la acción a tomar el día en cuestión. \cite{Zhang2015} analiza el mercado de índices accionarios de la bolsa de Shangai y vence a la estrategia Buy and Hold considerando costos de transacción, mientras que \cite{Preen2010} analiza diferentes acciones e índices accionarios venciendo a la estrategia Buy and Hold en la mayoría de los casos, considerando también costos de transacción.
 
 
 \section{Primeros experimentos (cajas negras)}
-\subsection{Datasets}
 
-We used daily price data (open price, maximum price, minimum price, adjusted close price) from Yahoo Finance \footnote{https://finance.yahoo.com/} for NAFTRAC for a time period between February 4th 2014 up to April 5th 2018.
+Como una etapa preliminar se realizaron un conjunto de experimentos utilizando algoritmos de aprendizaje que pertenecen a la categoría de "cajas negras", concretamente se probaron dos modelos distintos:
 
-Worth mention that this is an unlabeled dataset, hence, we first need to find a way to label it in order to use supervised pattern recognition techniques. The approach taken is based on the idea of "given the historical prices, what should one have had to do in order to make profits?"
+\begin{itemize}
+	\item Máquinas de soporte vectorial.
+	\item Perceptrón multicapa.
+\end{itemize}
 
-\subsubsection{Training set and test set}
+\subsection{Conjunto de datos}
 
-For obtaining the training and test sets, the data was divided in three-months periods, starting on the day February 4th 2014. Following a three-months training period, there is a three-months test period, which later will become the new three-months training period, that is, we use a rolling window to separate the dataset as shown in the table below.
+Se utilizaron precios diarios (precio de apertura, precio máximo, precio mínimo, precio de cierre) para el TRAC \textbf{NAFTRAC ISHRS}, el periodo elegido fue del 4 de febrero de 2014 al 5 de abril de 2018.\footnote{Estos datos fueron obtenidos de Yahoo Finance, https://finance.yahoo.com/}.
+
+Vale la pena señalar que este conjunto de datos no es un conjunto de datos etiquetado, por lo tanto, una primera etapa consistió en idear una forma de etiquetarlos; este problema se abordó tratando de resolver la siguiente pregunta
+
+\begin{center}
+	\textit{Dados los precios históricos, ¿qué debí haber hecho para obtener ganancias?}
+\end{center}
+
+
+\subsubsection{Conjuntos de entrenamiento y prueba\\}
+
+Para obtener los conjuntos de entrenamiento y prueba, los datos se dividieron en periodos de tres meses iniciando el día 4 de febrero de 2014. Después de cada periodo de entrenamiento de tres meses, los siguientes tres meses se consideran un periodo de prueba, este mismo periodo de prueba será después un nuevo conjunto de entrenamiento y así sucesivamente.
 
 \begin{table}[H]
-\caption{Training and test set separation}
+\caption{Periodos de entrenamiento y prueba}
 \label{tabla-entrena-prueba}
 \centering
-\begin{tabular}{p{2.5cm}p{2.5cm}p{2.5cm}p{2.5cm}}
-\hline Start training & End training & Start test & End test \\ 
+\begin{tabular}{p{3.5cm}p{3.5cm}p{3.5cm}p{2.0cm}}
+\hline Inicio entrenamiento & Fin entrenamiento & Inicio prueba & Fin prueba \\ 
 \hline 2014-02-04 & 2014-04-30 & 2014-05-02 & 2014-07-31 \\ 
  2014-05-02 & 2014-07-31 & 2014-08-04 & 2014-10-31 \\ 
  2014-08-04 & 2014-10-31 & 2014-11-03 & 2015-01-30 \\ 
@@ -183,122 +216,118 @@ For obtaining the training and test sets, the data was divided in three-months p
 
 \end{table} 
 
-Using the procedure above, we were able to obtain 16 training/test datasets.
+Utilizando esta forma de separar los datos fue posible obtener 16 conjuntos de entrenamiento y 16 de prueba.
 
+\subsection{Proceso de etiquetado}
 
-\subsection{Labeling process}
+Como se mencionó anteriormente, necesitamos etiquetar cada observación en el conjunto de entrenamiento de acuerdo a una de las tres posibles acciones: comprar, vender o esperar. Para automatizar dicho etiquetado, se utilizó un algoritmo genético el cual busca la mejor estrategia para el periodo dado, esto es, la estrategia que habría generado mejores ganancias (o menores pérdidas) que aquellas generadas por la estrategia Buy and Hold.
 
-As mentioned before, we need to label each observation in the training datasets according to one of the three possible actions: buy, sell or hold. To achieve this we used an Estimation Distribution Algorithm (EDA, \cite{dan-simon}), namely, we used a version of an Univariate Marginal Distribution Algorithm (UMDA).   
+Cada individuo en la población fue codificado como un vector, $\mathbf{x}$, que representa una estrategia de operación. La longitud de $\mathbf{x}$ es igual al número de días en el conjunto de entrenamiento y cada entrada en este vector puede tomar un valor del conjunto $\{-1,0,1\}$, en donde cada número $-1, 0, 1$ se interpreta, respectivamente, como: vender, esperar, comprar. De esta manera la \textit{i-ésima} componente del vector $\mathbf{x}$ representa la decisión que se toma en el día $i$.
 
-This algorithm tries to find the best strategy for the given training period, that is, the strategy that would have generated a bigger (minor) profit (loss) compared to the BH strategy.
+Así pues, el algoritmo busca la mejor combinación de $-1, 0, 1$ que maximiza (minimiza) la ganancia (pérdida), la cual se calcula como el \textbf{exceso de ganancia} sobre la estrategia Buy and Hold, es decir, la resta de la ganancia generada por $\mathbf{x}$ y la generada por seguir Buy and Hold (BH).
 
-Each individual in the population was encoded as a vector, $\mathbf{x}$, representing a trading strategy and having length equal to the number of trading days in the training period. Each entry in the vector takes a value in the set $\{-1,0,1\}$, where $-1,0,1;$ represents a sell, hold and buy signal respectively. Thus the \textit{i-th} component is the decision taken on day $i$. The algorithm finds the combination maximizing the profit, which is measured as the \textbf{Excess Return} over the BH strategy, that is, the return generated by the vector $\mathbf{x}$ minus the return generated by BH.
+\begin{center}
+	$Ex = Ganancia(\mathbf{x}) - Ganancia(BH)$
+\end{center}
+
+En la siguiente figura se muestra el resultado del proceso de etiquetado para un conjunto de entrenamiento. Nótese que el algoritmo encuentra una estrategia en la cual se compra barato y se vende caro.
 
 \begin{figure}[H]
 	\centering
 	\rotatebox{0}{\includegraphics[width=1.0\linewidth]{imagenes/etiquetamiento_ENG}}
-	\caption{Results from the labeling process}
+	\caption{Resultado del proceso de etiquetado para un conjunto de entrenamiento}
 	\label{fig:etiquetamiento}
 \end{figure}
 
-\subsection{Features}
-
-For each day, the open, minimum, maximum and adjusted close prices were used as features.
-
-
-\subsection{Results}
-
-For every training and test set, the following models were tested\footnote{We chose these models since they're among the most popular ones used in the pattern recognition literature (see \cite{bishop} and \cite{quinlan} for their mathematical description) .
-}:
+\subsection{Atributos}
+Como atributos se utilizaron los siguientes precios:
 
 \begin{itemize}
-
-	\item Support Vector Machine with gaussian kernel and assigning class weigths of $0.45, 0.10, 0.45$ for classes $-1, 0, 1$ respectively. 
-	
-	\item Multilayer perceptron with a hidden layer with 10 neurons and \textit{ReLu} as activation function.
-	
-	
-	\item C4.5 tree with max depth of 5.	
-	
+	\item Precio de apertura del día.
+	\item Precio mínimo del día.
+	\item Pecio máximo del día.
+	\item Precio de de cierre del día.
 \end{itemize}
 
+\subsection{Resultados}
+Para cada conjunto de entrenamiento y prueba, los siguientes modelos fueron utilizados (la motivación de elegir estos modelos se basó únicamente en su popularidad, ver \cite{bishop} para una descripción más detallada de sus propiedades matemáticas)
 
-As described above, the performance measure was \textbf{Excess Return} which is calculated using the following assumptions:
+\begin{itemize}
+	\item Máquina de soporte vectorial con kernel gaussiano y asignando un peso de $0.45, 0.10, 0.45$ para las clases $-1, 0, 1$ respectivamente.
+	
+	\item Perceptrón multicapa con una capa oculta de 10 neuronas, función de activación \textit{ReLu}.
+\end{itemize}
 
+Como se explicó anteriormente, la medida de desempeño fue el \textbf{exceso de ganancia}, la cual se calculó utilizando los siguiente supuestos:
+ 
 %\subsubsection{Assumptions}
 \begin{itemize}
+	
+	\item No se permiten ventas en corto, esto quiere decir que únicamente se puede vender cuando se ha comprado en un momento anterior. (no podemos vender algo que no poseemos)
+	
+	\item No se permite la ejecución de señales sucesivas repetidas, es decir, si ejecutamos una compra, invertimos todo nuestro capital disponible en ese momento; de la misma forma, al vender, vendemos todo lo que sea posible.
+	
+	\item Ya que utilizamos datos al cierre del día, si tenemos una señal de compra o venta en el día $t$, entonces compramos o vendemos (precio de ejecución) a un precio igual al promedio del precio máximo y precio mínimo del día $t+1$.\\
+	
+	\item El costo de cada transacción genera una comisión del $0.25 \%$. Por ejemplo, si compramos una acción que cuesta $\$10$, entonces el capital necesario para ejecutar dicha operación es igual a $\$10(1+0.0025)$; de la misma forma, si vendemos una acción en $\$10$, terminamos recibiendo una cantidad de $\$10(1-0.0025)$
 
-	\item No short-sales allowed, this means that one can only sell if a buy action occurred in the past (we can't sell something that we don't own).
-	
-	\item Once a trading signal is activated, we have to wait until we see a different one, so no repetitions of the same signal are allowed. This avoids excessive buys or sells.
-		
-	\item Since we are using end of day data, if we have a buy or sell signal on day $t$, then the buy or sell price (execution price) is the average between the minimum and maximum price at day $t+1$.
-	
-	\item The cost of every transaction is equal to a $0.25 \%$ over the total cost. For example, if a stock was bought  at a price of $\$10$, then the actual monetary amount paid for it is equal to $\$10(1+0.0025)$; likewise if a stock was sold at a price of $\$10$ we end up receiving. a monetary amount of $\$10(1-0.0025)$.
 \end{itemize}
 
-For every test set and every model we obtained the following results.
+Para cada conjunto de prueba, se obtuvieron los siguientes resultados:
 
 \begin{table}[H]
-\caption{Results obtained for every model}
+\caption{Resultados obtenidos en cada modelo}
 \label{table excess returns}
 \centering
-\begin{tabular}{p{5cm}rrr}
+\begin{tabular}{p{5cm}rr}
 	\hline
-	\multicolumn{4}{r}{Excess Return} \\
+	\multicolumn{3}{r}{Exceso de ganancia (porcentaje)} \\
 	\hline
-	Test set & SVM & MLP & C4.5 \\
+	Test set & SVM & MLP \\
 	\hline
-	2014-05-02 / 2014-07-31 & -0.013  & -0.067 & -0.067 \\
-	2014-08-04 / 2014-10-31 & 0.0 & -0.006 & -0.006 \\
-	2014-11-03 / 2015-01-30 & 0.0 & 0.0 & 0.0 \\
-	2015-02-03 / 2015-04-30 & -0.058 &  -0.066 & -0.07 \\
-	2015-05-04 / 2015-07-31 & 0.0 & 0.0 & -0.039 \\
-	2015-08-03 / 2015-10-30 & 0.02 & 0.0 & 0.025 \\
-	2015-11-04 / 2016-01-29 & 0.113 & 0.054 & 0.091 \\
-	2016-02-02 / 2016-04-28 & -0.053 & -0.025 & -0.065 \\
-	2016-05-02 / 2016-07-29 & 0.046 & -0.025 &  -0.024 \\
-	2016-08-01 / 2016-10-31 & 0.003 & -0.027 & -0.027 \\
-	2016-11-01 / 2017-01-31 & 0.028 & 0.004 & 0.01 \\
-	2017-02-01 / 2017-04-28 & -0.008 & -0.045 & -0.047 \\
-	2017-05-02 / 2017-07-31 & -0.029 & -0.029 & -0.014 \\
-	2017-08-01 / 2017-10-31 & 0.016 & 0.054 & 0.045 \\
-	2017-11-03 / 2018-01-31 & -0.033 & 0.032 & -0.06 \\
-	2018-02-01 / 2018-04-05 & 0.0 & 0.0 &  0.069 \\
+	2014-05-02 / 2014-07-31 & -0.013  & -0.067 \\
+	2014-08-04 / 2014-10-31 & 0.0 & -0.006 \\
+	2014-11-03 / 2015-01-30 & 0.0 & 0.0  \\
+	2015-02-03 / 2015-04-30 & -0.058 &  -0.066 \\
+	2015-05-04 / 2015-07-31 & 0.0 & 0.0  \\
+	2015-08-03 / 2015-10-30 & 0.02 & 0.0 \\
+	2015-11-04 / 2016-01-29 & 0.113 & 0.054 \\
+	2016-02-02 / 2016-04-28 & -0.053 & -0.025 \\
+	2016-05-02 / 2016-07-29 & 0.046 & -0.025\\
+	2016-08-01 / 2016-10-31 & 0.003 & -0.027\\
+	2016-11-01 / 2017-01-31 & 0.028 & 0.004\\
+	2017-02-01 / 2017-04-28 & -0.008 & -0.045\\
+	2017-05-02 / 2017-07-31 & -0.029 & -0.029\\
+	2017-08-01 / 2017-10-31 & 0.016 & 0.054 \\
+	2017-11-03 / 2018-01-31 & -0.033 & 0.032 \\
+	2018-02-01 / 2018-04-05 & 0.0 & 0.0\\
 	
 	\hline
-	Overall sum & 0.32 & -0.174 & -0.179 \\
+	Suma & 0.32 & -0.174 \\
 	
 	\hline
-	Average & 0.002 & -0.01 & -0.011 \\
+	Promedio & 0.002 & -0.01\\
 	\hline
-	Number of positive excess returns &  6 & 4 & 5 \\
+	Número de escenarios positivos &  6 & 4 \\
 	\hline
-	Number of negative excess returns & 6 & 8 & 10 \\  
+	Número de escenarios negativos & 6 & 8 \\  
 	
 
 	\hline 
 \end{tabular}
 \end{table}	
 
-\newpage
+Como podemos observar, los mejores resultados se obtuvieron con la máquina de soporte vectorial,  desafortunadamente, si utilizamos una prueba estadística del tipo \textit{t de Student} para la media (con un nivel de confianza del $95 \%$) encontramos que no es posible rechazar la hipótesis nula (la verdadera media es cero). Por lo tanto, estadísticamente hablando, no podemos concluir que esta metodología sea superior a la inversión pasiva.
 
-\section{Conclusions}
+\section{Trabajo futuro cuarto semestre}
 
-As we can observe, among the three models used, the best results were obtained by the Support Vector Machine.
-
-Unfortunately, even tough when in this model we obtained a positive average excess return, using a t-test for the mean (with a confidence level of $95 \%$) we found that is not possible to reject the null hypothesis (the true mean is zero) thus, statistically speaking, we can't conclude that this method beats the BH strategy systematically.
-
-Nonetheless it's worth to mention that thanks to the labeling method we can explore further other types of supervised learning techniques whether using a symbolic or sub-symbolic approach.
-
-The future directions for this work might be:
+Para el cuarto semestre estaré enfocándome en los siguientes puntos:
 
 \begin{itemize}
-	\item Explore symbolic approaches for supervised learning, such as Extended Classifier System (XCS).
-	\item Analyze the inclusion of technical indicators.
-	\item Use another set of features.
-	\item Use other sampling frequencies.
-	\item Use risk-adjusted performance measures.
+	\item Explorar distintos paradigmas simbólicos de aprendizaje supervisado. La idea es obtener un conjunto de reglas \textit{if-then}.
+	\item Incluir indicadores técnicos en el conjunto de atributos.
+	\item Experimentar con distintas frecuencias de muestreo para construir los conjuntos de entrenamiento y prueba.
+	\item Explorar otras formas de etiquetado de datos.
 \end{itemize}
 
 \newpage 
