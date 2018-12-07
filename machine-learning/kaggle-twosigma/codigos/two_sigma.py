@@ -114,7 +114,7 @@ def predice_confianza(modelo, atributos_asset):
 
 #Función para crear un diccionario que contendrá un modelo para
 #cada assetName
-def diccionaro_modelos(entrena, atributos):
+def diccionario_modelos(entrena, atributos):
 	'''
 	ENTRADA
 	entrena: Pandas dataframe con el conjunto de entrenamiento etiquetado
@@ -136,18 +136,20 @@ def diccionaro_modelos(entrena, atributos):
 		#Obtiene atributos y clases para ajustar el modelo
 		atributos_asset, clases_asset = obten_atributos(entrena, nombre,atributos,True)
 
-		#ajusta modelo
-		modelo = ajusta_svm(atributos_asset, clases_asset)
+		#Revisa si se tiene información
+		#y que se tengan dos clases
+		if atributos_asset.shape[0]!=0 and len(np.unique(clases_asset))>1:
 
-		#agrega al diccionario
-		dicc[nombre] = modelo
+			#ajusta modelo
+			modelo = ajusta_svm(atributos_asset, clases_asset)
+
+			#agrega al diccionario
+			dicc[nombre] = modelo
+
+			print ('Modelo ajustado para ' + nombre)
 
 	return dicc	
 
-
-
-		
-		
 #Atributos
 atributos = ('returnsClosePrevRaw1', 'returnsOpenPrevRaw1', 'returnsClosePrevMktres1', 
 	'returnsOpenPrevMktres1', 'returnsClosePrevRaw10', 'returnsOpenPrevRaw10',
@@ -188,3 +190,71 @@ dias_prediccion = env.get_prediction_days()
 
 #Obtiene los datos del día t
 (market_obs_df, news_obs_df, predictions_template_df) = next(dias_prediccion)
+
+#Función para predicir el conjunto prueba
+def predice_prueba(dicc_modelos, atributos, env):
+	'''
+	ENTRADA
+	dicc_modelos: Diccionario creado con la función diccionario_modelos
+
+	atributos: Tupla de strings con los atributos que se buscan obtener
+
+	env: Ambiente con los datos (ver función twosigmanews.make_env())
+
+	SALIDA
+	csv con el formato requerido para la competencia
+	'''
+
+	#Obtiene el generador del conjunto de prueba
+	dias_prediccion = env.get_prediction_days()
+
+	#keys del diccionario (aquellos assetName con un modelo asociado)
+	dicc_keys = dicc_modelos.keys()
+
+	for (market_obs_df, news_obs_df, predictions_template_df) in dias_prediccion:
+
+		#Obtiene los nombres del día en cuestión
+		nombres_dia = market_obs_df['assetName']
+
+		#auxiliar para el índice de la observación a predecir
+		aux_index = 0
+
+		for nombre in nombres_dia:
+
+			#Obtiene los atributos
+			atributos_asset = obten_atributos(market_obs_df, nombre,atributos, False)
+
+			#Cambia NaN por cero
+			atributos_asset = atributos_asset.fillna(0)
+
+			#Revisa si se tiene un modelo asociado al assetName
+			if nombre in dicc_keys:
+
+				cofianza  = predice_confianza(diccionario_modelos[nombre], atributos_asset)
+
+			else:
+
+				if np.average(atributos_asset) > 0:
+					confianza =np.random.uniform(low = 0.0, high = 1.0, size = 1)[0]
+				if 	np.average(atributos_asset) < 0:
+					confianza =np.random.uniform(low = -1.0, high = 0.0, size = 1)[0]
+
+			#Agrega al dataframe plantilla
+			predictions_template_df.loc[0,'confidenceValue'] = confianza
+
+		#realiza la predicción del día
+		env.predict(predictions_template_df)
+
+	#Escribe el archivo
+	env.write_submission_file()
+
+	print "Predicciones terminadas"		
+
+	return 0
+
+
+
+
+
+
+
