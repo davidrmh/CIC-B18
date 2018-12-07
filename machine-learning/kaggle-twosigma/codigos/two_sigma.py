@@ -16,7 +16,7 @@ def obten_atributos(datos, assetName,atributos, universo_bool = True):
 
 	assetName: String con el assetName
 
-	atributos: Tupla con los atributos que se buscan obtener
+	atributos: Tupla de strings con los atributos que se buscan obtener
 
 	universo_bool: Booleano. True => Se considera la columna universe == 1
 	(sólo para conjunto de entrenamiento)
@@ -111,6 +111,40 @@ def predice_confianza(modelo, atributos_asset):
 	confianza = probas[0][arg_proba_max]*modelo.classes_[arg_proba_max]
 
 	return confianza
+
+#Función para crear un diccionario que contendrá un modelo para
+#cada assetName
+def diccionaro_modelos(entrena, atributos):
+	'''
+	ENTRADA
+	entrena: Pandas dataframe con el conjunto de entrenamiento etiquetado
+	(ver función etiqueta)
+
+	atributos: Tupla de strings con los atributos que se buscan obtener
+
+	SALIDA
+	diccionario de la siguiente con key un asset_name y valor un modelo ajustado
+	'''
+
+	#assetNames sin repeticiones
+	nombres_unicos = np.unique(entrena['assetName'])
+
+	dicc = {}
+
+	for nombre in nombres_unicos:
+
+		#Obtiene atributos y clases para ajustar el modelo
+		atributos_asset, clases_asset = obten_atributos(entrena, nombre,atributos,True)
+
+		#ajusta modelo
+		modelo = ajusta_svm(atributos_asset, clases_asset)
+
+		#agrega al diccionario
+		dicc[nombre] = modelo
+
+	return dicc	
+
+
 
 		
 		
