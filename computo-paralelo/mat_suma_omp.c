@@ -1,6 +1,6 @@
-/* Multiplicación de matrices utilizando OMP
-/* Uso /mat_mult_omp 0 (para no desplegar resultados)
-/* /mat_mult_omp 1 (para desplegar resultados)
+/* Suma de matrices utilizando OMP
+/* Uso: ./mat_mult_omp 0 (para no desplegar resultados)
+/* ./mat_mult_omp 1 (para desplegar resultados)
 */
 
 #include<stdio.h>
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 	//Se imprimen resultados?
 	flag = atoi(argv[1]);
 
-	//Multiplicación
+	//Suma
 	#pragma omp parallel for private(i,j)
 	for(i = 0; i< NUM_ROWS_A; i++){
 
